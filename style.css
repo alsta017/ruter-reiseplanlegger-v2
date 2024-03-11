@@ -1,0 +1,190 @@
+body{
+    background-color: #121212;
+    color: white;
+}
+
+.page_wrapper{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.page_wrapper h1{
+    font-family: 'TID UI';
+    font-size: 250%;
+    margin: 16px;
+}
+.fratil{
+    background-color: #1f1f1f;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    border-radius: 8px;
+    padding: 8px;
+    width: 60vw;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+
+#fra, #til{
+    padding: 8px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+#fra p, #til p{
+    font-family: 'TID UI';
+    font-size: 125%;
+    margin: 0px;
+    margin-bottom: 4px;
+}
+#fra_input[type=text], #til_input[type=text] {
+    width: 16vw;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background-color: #2c2c2c;
+    color: white;
+    font-family: 'TID UI';
+    padding-left: 8px;
+    padding-right: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+#fra_input, #til_input{
+    margin-bottom: 0px;
+}
+#fra_input:disabled, #til_input:disabled{
+    cursor: not-allowed;
+}
+#fra_velg, #til_velg{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 20vw;
+    padding: 0px;
+    height: fit-content;
+    margin: 0px;
+}
+#fra_velg p, #til_velg p{
+    font-size: 90%;
+    font-family: 'TID UI';
+}
+@media only screen and (max-width: 800px) {
+    .fratil{
+        width: 95vw;
+    }
+    #fra, #til{
+        justify-content: center;
+        width: 100%;
+    }
+    #fra_input[type=text], #til_input[type=text] {
+        width: 30vw;
+    }
+}
+@media only screen and (max-width: 500px) {
+    .fratil{
+        flex-flow: column;
+        width: 80vw;
+    }
+    #fra, #til{
+        justify-content: center;
+        width: 100%;
+    }
+    .page_wrapper h1{
+        font-family: 'TID UI';
+        font-size: 10vw;
+        margin: 16px;
+    }
+    #fra_input[type=text], #til_input[type=text] {
+        width: 60vw;
+    }
+}
+.stasjonsP{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-flow: row-reverse;
+    padding: 8px;
+    margin: 0px;
+    margin-top: 8px;
+    border-radius: 8px;
+    background-color: #383838;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    cursor: pointer;
+}
+#fravelgdiv, #tilvelgdiv{
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+}
+.søkebutton{
+    font-family: 'TID UI';
+    font-size: 125%;
+    border-radius: 8px;
+    border: none;
+    background-color: #1f1f1f;
+    color: white;
+    padding: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    width: 150px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: 4px;
+    border-radius: 8px;
+    margin-right: 4px;
+}
+.bus{
+    background-color: #E60000;
+}
+.metro{
+    background-color: #EC700C;
+}
+.tram{
+    background-color: #28A2F8;
+}
+.train{
+    background-color: #1321A9;
+}
+.ferry{
+    background-color: #6A2D98;
+}
+
+.toggle_light_mode{
+    cursor: pointer;
+    position: absolute;
+    margin-left: 97.5vw;
+    font-size: 250%;
+}
+
+.light_mode{
+    background-color: white;
+    color: black;
+}
+.light_mode2{
+    background-color: #e5e5e5;
+    color: black;
+}
+.light_mode3 .stasjonsP{
+    background-color: #cccccc;
+    color: black;
+}
+.light_mode4 #fra_input[type=text], .light_mode4 #til_input[type=text] {
+    background-color: #cccccc;
+    color: black;
+}
+
+
+@font-face {
+    font-family: 'TID UI';
+    src: url(fonts/TIDUI-Regular.ttf);
+}
