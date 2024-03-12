@@ -18,6 +18,8 @@ let geocoder_til_data;
 let geocoder_fra_data;
 if (localStorage.getItem("light_mode") == "true") {
     darkmodecheck()
+} else {
+    localStorage.setItem("light_mode", "false");
 }
 
 fraInput.onkeydown = function() {
