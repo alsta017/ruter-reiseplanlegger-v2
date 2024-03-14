@@ -72,6 +72,9 @@ body{
     font-size: 90%;
     font-family: 'TID UI';
 }
+.light_mode3 .bus, .light_mode3 .ferry, .light_mode3 .metro, .light_mode3 .train, .light_mode3 .tram{
+    color: white;
+}
 @media only screen and (max-width: 800px) {
     .fratil{
         width: 95vw;
@@ -157,6 +160,31 @@ body{
 }
 .ferry{
     background-color: #6A2D98;
+}
+
+.velgebutton{
+    font-family: 'TID UI';
+    font-size: 100%;
+    border-radius: 8px;
+    border: none;
+    background-color: #2c2c2c;
+    color: white;
+    padding: 8px;
+    margin: 4px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    cursor: pointer;
+}
+
+.selected{
+    background-color: #383838;
+}
+.ekstra_valg{
+    background-color: #1f1f1f;
+    color: white;
+    padding: 4px;
+    margin: 8px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .toggle_light_mode{

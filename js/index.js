@@ -6,6 +6,7 @@ let fraVelg = document.getElementById("fra_velg");
 let tilVelg = document.getElementById("til_velg");
 let fratil = document.querySelector(".fratil");
 let søkeButton = document.querySelector(".søkebutton")
+let icon = document.querySelector(".icon");
 let velgArr = [];
 let stedArr = [];
 let velgArr2 = [];
@@ -63,8 +64,9 @@ function fra_geocoder_fra() {
                 let icon5;
                 let icon6;
                 let icon7;
+                let icon8;
                 for (y = 0; y < data.features[x].properties.category.length; y++) {
-                    if(data.features[x].properties.category[y] === "onstreetBus" | data.features[x].properties.category[y] === "busStation") {
+                    if(data.features[x].properties.category[y] === "onstreetBus" | data.features[x].properties.category[y] === "busStation" | data.features[x].properties.category[y] === "coachStation") {
                         if (!icon) {
                             icon = document.createElement("i");
                             icon.className = "fa-solid fa-bus icon bus";
@@ -76,7 +78,7 @@ function fra_geocoder_fra() {
                             icon2.className = "fa-solid fa-train-subway icon metro";
                             stasjonsP.appendChild(icon2)
                         }
-                    } else if(data.features[x].properties.category[y] === "onstreetTram") {
+                    } else if(data.features[x].properties.category[y] === "onstreetTram" | data.features[x].properties.category[y] === "tramStation") {
                         if (!icon3) {
                             icon3 = document.createElement("i");
                             icon3.className = "fa-solid fa-train-tram icon tram";
@@ -88,7 +90,7 @@ function fra_geocoder_fra() {
                             icon4.className = "fa-solid fa-train icon train";
                             stasjonsP.appendChild(icon4)
                         }
-                    } else if(data.features[x].properties.category[y] === "ferryStop") {
+                    } else if(data.features[x].properties.category[y] === "ferryStop" | data.features[x].properties.category[y] === "harbourPort" | data.features[x].properties.category[y] === "ferryPort" | data.features[x].properties.category[y] === "ferryStop") {
                         if (!icon5) {
                             icon5 = document.createElement("i");
                             icon5.className = "fa-solid fa-ferry icon ferry";
@@ -100,7 +102,13 @@ function fra_geocoder_fra() {
                             icon6.className = "fa-solid fa-plane-departure icon airport";
                             stasjonsP.appendChild(icon6)
                         }
-                    } else{
+                    } else if(data.features[x].properties.category[y] === "liftStation") {
+                        if (!icon8) {
+                            icon8 = document.createElement("i");
+                            icon8.className = "fa-solid fa-cable-car icon lift";
+                            stasjonsP.appendChild(icon8)
+                        }
+                    } else {
                         if (!icon7) {
                             icon7 = document.createElement("i");
                             icon7.className = "fa-solid fa-location-dot icon point";
@@ -173,8 +181,9 @@ function fra_geocoder_til() {
                 let icon5;
                 let icon6;
                 let icon7;
+                let icon8;
                 for (y = 0; y < data.features[x].properties.category.length; y++) {
-                    if(data.features[x].properties.category[y] === "onstreetBus" | data.features[x].properties.category[y] === "busStation") {
+                    if(data.features[x].properties.category[y] === "onstreetBus" | data.features[x].properties.category[y] === "busStation" | data.features[x].properties.category[y] === "coachStation") {
                         if (!icon) {
                             icon = document.createElement("i");
                             icon.className = "fa-solid fa-bus icon bus";
@@ -186,7 +195,7 @@ function fra_geocoder_til() {
                             icon2.className = "fa-solid fa-train-subway icon metro";
                             stasjonsP.appendChild(icon2)
                         }
-                    } else if(data.features[x].properties.category[y] === "onstreetTram") {
+                    } else if(data.features[x].properties.category[y] === "onstreetTram" | data.features[x].properties.category[y] === "tramStation") {
                         if (!icon3) {
                             icon3 = document.createElement("i");
                             icon3.className = "fa-solid fa-train-tram icon tram";
@@ -198,7 +207,7 @@ function fra_geocoder_til() {
                             icon4.className = "fa-solid fa-train icon train";
                             stasjonsP.appendChild(icon4)
                         }
-                    } else if(data.features[x].properties.category[y] === "ferryStop") {
+                    } else if(data.features[x].properties.category[y] === "ferryStop" | data.features[x].properties.category[y] === "harbourPort" | data.features[x].properties.category[y] === "ferryPort" | data.features[x].properties.category[y] === "ferryStop") {
                         if (!icon5) {
                             icon5 = document.createElement("i");
                             icon5.className = "fa-solid fa-ferry icon ferry";
@@ -210,7 +219,13 @@ function fra_geocoder_til() {
                             icon6.className = "fa-solid fa-plane-departure icon airport";
                             stasjonsP.appendChild(icon6)
                         }
-                    } else{
+                    } else if(data.features[x].properties.category[y] === "liftStation") {
+                        if (!icon8) {
+                            icon8 = document.createElement("i");
+                            icon8.className = "fa-solid fa-cable-car icon lift";
+                            stasjonsP.appendChild(icon8)
+                        }
+                    } else {
                         if (!icon7) {
                             icon7 = document.createElement("i");
                             icon7.className = "fa-solid fa-location-dot icon point";
@@ -247,6 +262,25 @@ function søkreise() {
     if(fraInput.value.length == 0 || tilInput.value.length == 0) {
         alert("Vennligst fyll ut alle feltene")
     } else {
+        let fraValue;
+        let toValue;
+        
+        if (geocoder_fra_data.features[fraclickedid].properties.layer === "address") {
+            fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}, name: "${geocoder_fra_data.features[tilclickedid].properties.name}"}`
+        } else if (geocoder_fra_data.features[fraclickedid].properties.layer === "venue") {
+            fraValue = `{place: "${geocoder_fra_data.features[fraclickedid].properties.id}"}`
+        } else {
+            fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}}`
+        }
+
+        if (geocoder_til_data.features[tilclickedid].properties.layer === "address") {
+            toValue = `{coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}, name: "${geocoder_til_data.features[tilclickedid].properties.name}"}`
+        } else if (geocoder_til_data.features[tilclickedid].properties.layer === "venue") {
+            toValue = `{place: "${geocoder_til_data.features[tilclickedid].properties.id}"}`
+        } else {
+            toValue = `{coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}}`
+        }
+
         fetch('https://api.entur.io/journey-planner/v3/graphql', {
         method: 'POST',
         headers: {
@@ -259,9 +293,9 @@ function søkreise() {
         body: JSON.stringify({ 
             query: `{
                 trip(
-                    from: {coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}, name: "${geocoder_fra_data.features[tilclickedid].properties.name}"}
-                    to: {coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}, name: "${geocoder_til_data.features[tilclickedid].properties.name}"}
-                    dateTime: "2024-03-11T16:00:00.000Z"
+                    from: ${fraValue}
+                    to: ${toValue}
+                    dateTime: "2024-03-12T14:15:00.000Z"
                     arriveBy: false
                     walkSpeed: 1.3
                     includePlannedCancellations: true
