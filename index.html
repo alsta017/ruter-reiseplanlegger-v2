@@ -20,7 +20,7 @@
                         <input type="text" id="fra_input" placeholder="Hvor reiser du fra?" required>
                     </form>
                 </div>
-            <p id="fra_velg"></p>
+                <p id="fra_velg"></p>
             </div>
             <div id="tilvelgdiv">
                 <div id="til">
@@ -32,12 +32,23 @@
                 <p id="til_velg"></p>
             </div>
         </div>
-        <button type="submit" class="søkebutton" onclick="søkreise()">Søk reise</button>
         <div class="ekstra_valg">
-            <button type="button" class="velgebutton selected">Nå</button>
-            <button type="button" onclick="avgang()" class="velgebutton">Avgang</button>
-            <button type="button" onclick="ankomst()" class="velgebutton">Ankomst</button>
+            <div id="avgangankomstdiv">
+                <button type="button" onclick="now()" class="velgebutton selected nowbutton">Nå</button>
+                <button type="button" onclick="avgang()" class="velgebutton avgangbutton">Avgang</button>
+                <button type="button" onclick="ankomst()" class="velgebutton ankomstbutton">Ankomst</button>
+            </div>
+            <input type="datetime-local" id="datetimepicker">
+            <button id="avansert_ekstra_valg_button" class="ekstrabutton" onclick="avansert_ekstra_valg()">Ekstra valg <i class="fa-solid fa-caret-down" id="arrow"></i></button>
+            <div id="avansert_ekstra_valg">
+                <div id="byttetiddiv">
+                    <p>Byttetid</p>
+                    <select name="byttetid" id="byttetidid"><option value="0" selected>0 min</option><option value="1">1 min</option><option value="2">2 min</option><option value="3">3 min</option><option value="4">4 min</option><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option></select>
+                </div>
+            </div>
         </div>
+        <div class="avansert_ekstra_valg"></div>
+        <button class="søkebutton" onclick="søkreise()">Søk reise</button>
         <div id="resultaterdiv">
             <p id="resultater"></p>
         </div>

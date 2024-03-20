@@ -11,7 +11,7 @@ body{
 
 .page_wrapper h1{
     font-family: 'TID UI';
-    font-size: 250%;
+    font-size: 300%;
     margin: 16px;
 }
 .fratil{
@@ -20,8 +20,8 @@ body{
     flex-flow: row;
     justify-content: space-around;
     border-radius: 8px;
-    padding: 8px;
-    width: 60vw;
+    padding: 16px 8px;
+    width: max-content;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
@@ -34,6 +34,7 @@ body{
     flex-flow: column;
     align-items: center;
     justify-content: flex-start;
+    font-size: 180%;
 }
 #fra p, #til p{
     font-family: 'TID UI';
@@ -42,8 +43,8 @@ body{
     margin-bottom: 4px;
 }
 #fra_input[type=text], #til_input[type=text] {
-    width: 16vw;
-    height: 32px;
+    width: 32vw;
+    height: 45px;
     border-radius: 8px;
     border: none;
     background-color: #2c2c2c;
@@ -52,6 +53,7 @@ body{
     padding-left: 8px;
     padding-right: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    font-size: 100%;
 }
 #fra_input, #til_input{
     margin-bottom: 0px;
@@ -63,13 +65,13 @@ body{
     display: flex;
     flex-flow: column;
     align-items: center;
-    width: 20vw;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
     padding: 0px;
     height: fit-content;
     margin: 0px;
-}
-#fra_velg p, #til_velg p{
-    font-size: 90%;
+    font-size: 150%;
     font-family: 'TID UI';
 }
 .light_mode3 .bus, .light_mode3 .ferry, .light_mode3 .metro, .light_mode3 .train, .light_mode3 .tram{
@@ -107,7 +109,7 @@ body{
 }
 .stasjonsP{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     text-align: center;
     flex-flow: row-reverse;
@@ -118,6 +120,7 @@ body{
     background-color: #383838;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     cursor: pointer;
+    width: 95%;
 }
 #fravelgdiv, #tilvelgdiv{
     display: flex;
@@ -126,25 +129,24 @@ body{
 }
 .søkebutton{
     font-family: 'TID UI';
-    font-size: 125%;
+    font-size: 250%;
     border-radius: 8px;
     border: none;
     background-color: #1f1f1f;
     color: white;
-    padding: 8px;
+    padding: 8px 32px;
     margin-top: 8px;
     cursor: pointer;
-    width: 150px;
+    width: max-content;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .icon{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: auto;
     padding: 4px;
     border-radius: 8px;
-    margin-right: 4px;
+    margin: 4px;
 }
 .bus{
     background-color: #E60000;
@@ -164,7 +166,7 @@ body{
 
 .velgebutton{
     font-family: 'TID UI';
-    font-size: 100%;
+    font-size: 200%;
     border-radius: 8px;
     border: none;
     background-color: #2c2c2c;
@@ -177,14 +179,23 @@ body{
 
 .selected{
     background-color: #383838;
+    border: 1px solid white;
 }
 .ekstra_valg{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
     background-color: #1f1f1f;
     color: white;
     padding: 4px;
     margin: 8px;
+    margin-bottom: 0px;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+.ekstra_valg.light_mode2 button.selected{
+    background-color: #b2b2b2;
 }
 
 .toggle_light_mode{
@@ -202,14 +213,106 @@ body{
     background-color: #e5e5e5;
     color: black;
 }
-.light_mode3 .stasjonsP{
+.light_mode2 button, .light_mode3 .stasjonsP, .light_mode4 #fra_input[type=text], .light_mode4 #til_input[type=text]{
     background-color: #cccccc;
     color: black;
 }
-.light_mode4 #fra_input[type=text], .light_mode4 #til_input[type=text] {
+#avgangankomstdiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+}
+#datetimepicker{
+    margin-top: 6px;
+    margin-bottom: 8px;
+    display: none;
+    color: white;
+    color-scheme: dark;
+    width: 100%;
+}
+#datetimepicker[type=datetime-local]{
+    display: block;
+    width: 94%;
+    font-family: 'TID UI';
+    font-size: 150%;
+    border-radius: 8px;
+    border: none;
+    background-color: #2c2c2c;
+    color: white;
+    padding: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    cursor: pointer;
+}
+#datetimepicker.light_mode3{
+    color-scheme: light;
+}
+#datetimepicker[type=datetime-local].light_mode2{
+    color-scheme: light;
     background-color: #cccccc;
     color: black;
 }
+.ekstrabutton{
+    font-family: 'TID UI';
+    font-size: 175%;
+    border: none;
+    background-color: #1f1f1f;
+    color: white;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 4px;
+    padding: 4px;
+}
+.ekstrabutton.light_mode{
+    background-color: #e5e5e5;
+}
+#avansert_ekstra_valg{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: none;
+    font-family: 'TID UI';
+    margin-top: 8px;
+}
+#byttetidid{
+    display: block;
+    width: 100%;
+    font-family: 'TID UI';
+    font-size: 150%;
+    border-radius: 8px;
+    border: none;
+    background-color: #383838;
+    color: white;
+    padding: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+#byttetiddiv p{
+    font-size: 200%;
+    margin: 8px;
+}
+#byttetiddiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+    background-color: #2c2c2c;
+    color: white;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    margin-bottom: 4px;
+}
+#byttetiddiv.light_mode{
+    background-color: #cccccc;
+    color: black;
+}
+#byttetidid.light_mode{
+    background-color: #b2b2b2;
+    color: black;
+}
+
 
 
 @font-face {

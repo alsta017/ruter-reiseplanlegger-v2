@@ -7,6 +7,16 @@ let tilVelg = document.getElementById("til_velg");
 let fratil = document.querySelector(".fratil");
 let søkeButton = document.querySelector(".søkebutton")
 let icon = document.querySelector(".icon");
+let ekstra_valgEl = document.querySelector(".ekstra_valg")
+let avgangbuttonEl = document.querySelector(".avgangbutton")
+let ankomstbuttonEl = document.querySelector(".ankomstbutton")
+let nowbuttonEl = document.querySelector(".nowbutton")
+let datetimepickerEl = document.getElementById("datetimepicker")
+let avansert_ekstra_valgEl = document.getElementById("avansert_ekstra_valg")
+let avansert_ekstra_valg_buttonEl = document.getElementById("avansert_ekstra_valg_button")
+let arrowEl = document.getElementById("arrow");
+let byttetididEl = document.getElementById("byttetidid");
+let byttetiddivEl = document.getElementById("byttetiddiv");
 let velgArr = [];
 let stedArr = [];
 let velgArr2 = [];
@@ -17,6 +27,8 @@ let fraclickedid;
 let tilclickedid;
 let geocoder_til_data;
 let geocoder_fra_data;
+datetimepickerEl.style.display = "none";
+
 if (localStorage.getItem("light_mode") == "true") {
     darkmodecheck()
 } else {
@@ -295,7 +307,7 @@ function søkreise() {
                 trip(
                     from: ${fraValue}
                     to: ${toValue}
-                    dateTime: "2024-03-12T14:15:00.000Z"
+                    dateTime: "2024-03-19T14:15:00.000Z"
                     arriveBy: false
                     walkSpeed: 1.3
                     includePlannedCancellations: true
@@ -363,6 +375,26 @@ function søkreise() {
 }
 
 
+function avgang() {
+    nowbuttonEl.classList.remove("selected");
+    ankomstbuttonEl.classList.remove("selected");
+    avgangbuttonEl.classList.add("selected");
+    datetimepickerEl.style.display = "block";
+}
+
+function ankomst() {
+    nowbuttonEl.classList.remove("selected");
+    ankomstbuttonEl.classList.add("selected");
+    avgangbuttonEl.classList.remove("selected");
+    datetimepickerEl.style.display = "block";
+}
+
+function now() {
+    nowbuttonEl.classList.add("selected");
+    ankomstbuttonEl.classList.remove("selected");
+    avgangbuttonEl.classList.remove("selected");
+    datetimepickerEl.style.display = "none";
+}
 
 function toggle_dark_mode() {
     if (localStorage.getItem("light_mode") === "false") {
@@ -372,6 +404,19 @@ function toggle_dark_mode() {
     }
     darkmodecheck()
 }
+function avansert_ekstra_valg() {
+    if (avansert_ekstra_valgEl.style.display === "flex") {
+        avansert_ekstra_valgEl.style.display = "none";
+        arrowEl.classList.remove("fa-caret-up");
+        arrowEl.classList.add("fa-caret-down");
+    } else {
+        avansert_ekstra_valgEl.style.display = "flex";
+        arrowEl.classList.add("fa-caret-up");
+        arrowEl.classList.remove("fa-caret-down");
+    }
+    
+}
+
 function darkmodecheck() {
     var elements = [document.body];
     for(i = 0; i < elements.length; i++) {
@@ -379,9 +424,15 @@ function darkmodecheck() {
     }
     fratil.classList.toggle("light_mode2")
     søkeButton.classList.toggle("light_mode2")
+    ekstra_valgEl.classList.toggle("light_mode2")
     // Må fikses nedenfor
     fraVelg.classList.toggle("light_mode3")
     tilVelg.classList.toggle("light_mode3")
     fraForm.classList.toggle("light_mode4")
     tilForm.classList.toggle("light_mode4")
+    datetimepickerEl.classList.toggle("light_mode2")
+    avansert_ekstra_valg_buttonEl.classList.toggle("light_mode")
+    byttetididEl.classList.toggle("light_mode")
+    byttetiddivEl.classList.toggle("light_mode")
+    
 }
