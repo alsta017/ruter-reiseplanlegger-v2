@@ -10,6 +10,8 @@ let icon = document.querySelector(".icon");
 let ekstra_valgEl = document.querySelector(".ekstra_valg")
 let avgangbuttonEl = document.querySelector(".avgangbutton")
 let ankomstbuttonEl = document.querySelector(".ankomstbutton")
+let avgangbuttonidEl = document.getElementById("avgangbuttonid")
+let ankomstbuttonidEl = document.getElementById("ankomstbuttonid")
 let nowbuttonEl = document.querySelector(".nowbutton")
 let datetimepickerEl = document.getElementById("datetimepicker")
 let avansert_ekstra_valgEl = document.getElementById("avansert_ekstra_valg")
@@ -293,6 +295,23 @@ function søkreise() {
             toValue = `{coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}}`
         }
 
+        let timeEl;
+        let avgangAnkomst;
+        if (avgangbuttonidEl.classList.contains("selected")) {
+            timeEl = new Date(datetimepickerEl.value).toISOString();
+            avgangAnkomst = false;
+        } else if (ankomstbuttonidEl.classList.contains("selected")) {
+            timeEl = new Date(datetimepickerEl.value).toISOString();
+            avgangAnkomst = true;
+        } else {
+            timeEl = new Date().toISOString();
+            avgangAnkomst = false;
+        }
+        console.log(timeEl)
+        console.log(avgangAnkomst)
+        console.log(byttetididEl.value)
+        let byttetididElSec = byttetididEl.value * 60;
+
         fetch('https://api.entur.io/journey-planner/v3/graphql', {
         method: 'POST',
         headers: {
@@ -307,12 +326,12 @@ function søkreise() {
                 trip(
                     from: ${fraValue}
                     to: ${toValue}
-                    dateTime: "2024-03-19T14:15:00.000Z"
-                    arriveBy: false
+                    dateTime: "${timeEl}"
+                    arriveBy: ${avgangAnkomst}
                     walkSpeed: 1.3
                     includePlannedCancellations: true
                     includeRealtimeCancellations: true
-                    transferSlack: 5
+                    transferSlack: ${byttetididElSec}
                 ) {
                     fromPlace {
                         name
@@ -434,5 +453,7 @@ function darkmodecheck() {
     avansert_ekstra_valg_buttonEl.classList.toggle("light_mode")
     byttetididEl.classList.toggle("light_mode")
     byttetiddivEl.classList.toggle("light_mode")
-    
+    nowbuttonEl.classList.toggle("light_mode5")
+    ankomstbuttonEl.classList.toggle("light_mode5")
+    avgangbuttonEl.classList.toggle("light_mode5")
 }

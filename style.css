@@ -176,10 +176,19 @@ body{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     cursor: pointer;
 }
+.velgebutton:hover{
+    background-color: #383833;
+}
+.velgebutton.light_mode5:hover{
+    background-color: #b2b2b2;
+}
 
 .selected{
     background-color: #383838;
     border: 1px solid white;
+}
+.selected.light_mode5{
+    border: 1px solid black;
 }
 .ekstra_valg{
     display: flex;
@@ -201,7 +210,7 @@ body{
 .toggle_light_mode{
     cursor: pointer;
     position: absolute;
-    margin-left: 97.5vw;
+    right: 8px;
     font-size: 250%;
 }
 
