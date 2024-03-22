@@ -1,3 +1,5 @@
+
+// Definere variabler fra HTML
 let fraForm = document.querySelector(".fra_form");
 let tilForm = document.querySelector(".til_form");
 let fraInput = document.getElementById("fra_input")
@@ -19,6 +21,9 @@ let avansert_ekstra_valg_buttonEl = document.getElementById("avansert_ekstra_val
 let arrowEl = document.getElementById("arrow");
 let byttetididEl = document.getElementById("byttetidid");
 let byttetiddivEl = document.getElementById("byttetiddiv");
+let resultaterEl = document.getElementById("resultater")
+
+// Definere generelle variabler som skal bruke senere
 let velgArr = [];
 let stedArr = [];
 let velgArr2 = [];
@@ -29,48 +34,70 @@ let fraclickedid;
 let tilclickedid;
 let geocoder_til_data;
 let geocoder_fra_data;
+
+// Ikke vise date time picker on start
 datetimepickerEl.style.display = "none";
 
+// Skjekk om dark mode er på eller av (LocalStorage)
 if (localStorage.getItem("light_mode") == "true") {
     darkmodecheck()
 } else {
     localStorage.setItem("light_mode", "false");
 }
 
+// Når man skriver noe i FraInput
 fraInput.onkeydown = function() {
+
+    // Nullstille alt
     velgArr = [];
     fraVelg.textContent = "";
+
+    // Vise fraVelg
     fraVelg.style.display = "flex";
 
+    // Lage laster P element
     let tilload = document.createElement("p");
-    tilload.textContent = "Loading...";
+    tilload.textContent = "Laster inn...";
     fraVelg.appendChild(tilload);
 
+    // Lage searchTimeout på 0.5 sekunder så den ikke sender requests hele tiden (timeout)
     if (searchTimeout != undefined) clearTimeout(searchTimeout);
     searchTimeout = setTimeout(fra_geocoder_fra, 500);
 };
 
 function fra_geocoder_fra() {
+
+    // Api request geocoder api (for å finne stedsnavn / coords)
     fetch(`https://api.entur.io/geocoder/v1/autocomplete?text=${fraInput.value}`, {
-            headers: {
-                "ET-Client-Name": "alsta-bussen",
+            headers: { 
+                "ET-Client-Name": "alsta017-reiseplanlegger",
             },
         })
         .then(response => response.json())
         .then(data => {
+
+            // Definere arrays or resette
             stedArr = [];
             velgArr = [];
             fraVelg.textContent = "";
             a = 0;
+
             console.log(data);
+
             geocoder_fra_data = data;
+
+            // For alle resultater av stedsnavn i data, legg til i stedArr og vise i fraVelg
             for(x = 0; x < data.features.length; x++) {
                 a++;
+
+                // Ny div for hver stedsnavn
                 let stasjonsP = document.createElement("p");
                 stasjonsP.className = "stasjonsP";
                 stasjonsP.setAttribute("id", `${a}`)
                 stasjonsP.setAttribute("onclick", "buttonclicked(this.id)");
                 stasjonsP.innerHTML = data.features[x].properties.label;
+
+                // Definere ikoner
                 let icon;
                 let icon2;
                 let icon3;
@@ -79,6 +106,8 @@ function fra_geocoder_fra() {
                 let icon6;
                 let icon7;
                 let icon8;
+
+                // Legge til ikoner basert på feature
                 for (y = 0; y < data.features[x].properties.category.length; y++) {
                     if(data.features[x].properties.category[y] === "onstreetBus" | data.features[x].properties.category[y] === "busStation" | data.features[x].properties.category[y] === "coachStation") {
                         if (!icon) {
@@ -130,47 +159,69 @@ function fra_geocoder_fra() {
                         }
                     }
                 }
+
+                // Definere id og navn for hver stedsnavn
                 var fraId = data.features[x].properties.id;
                 var stasjonsnavn = data.features[x].properties.label;
+
+                // Legge til i html (append)
                 fraVelg.appendChild(stasjonsP);
                 velgArr.push(fraId);
                 stedArr.push(stasjonsnavn);
             }
+
+            // hvis ingen resultater
             if(velgArr.length === 0) {
+                // Lage ny p element
                 let tilnoresult = document.createElement("p")
                 if(fraInput.value.length == 0) {
+                    // Fjerne element fra html
                     fraVelg.removeChild(tilnoresult);
                 } else {
+                    // Legge til ingen resultater tekst
                     tilnoresult.textContent = "Ingen resultater."
                 }
+                // Legge til i html (append)
                 fraVelg.appendChild(tilnoresult)
             }
         }) 
 }
+
+// Når knappen på stedsnavn trykket
 function buttonclicked(clicked_id) {
+    // Hide fraVelg
     fraVelg.style.display = "none";
+
+    // Putte samme id i button som i stedArr
     fraInput.value = stedArr[clicked_id - 1];
+
+    // Tømme stedArr
     stedArr = [];
+
+    // Definere fraVelgClickedId som er iden til knappen som blir trykket
     fraclickedid = clicked_id - 1;
+
 }
 
+// Skjekk fraInput for kommentarer
 tilInput.onkeydown = function() {
     velgArr2 = [];
     tilVelg.textContent = "";
     tilVelg.style.display = "flex";
 
     let tilload2 = document.createElement("p");
-    tilload2.textContent = "Loading...";
+    tilload2.textContent = "Laster inn...";
     tilVelg.appendChild(tilload2);
 
     if (searchTimeout2 != undefined) clearTimeout(searchTimeout2);
     searchTimeout2 = setTimeout(fra_geocoder_til, 500);
 };
 
+// Skjekk fra_geocoder_fra for kommentarer
 function fra_geocoder_til() {
     fetch(`https://api.entur.io/geocoder/v1/autocomplete?text=${tilInput.value}`, {
             headers: {
-                "ET-Client-Name": "alsta-bussen",
+                "ET-Client-Name": "alsta017-reiseplanlegger",
             },
         })
         .then(response => response.json())
@@ -264,6 +315,8 @@ function fra_geocoder_til() {
             }
         }) 
 }
+
+// Skjekk buttonclicked for kommentarer
 function buttonclickedtil(clicked_id) {
     tilVelg.style.display = "none";
     tilInput.value = stedArr2[clicked_id - 1];
@@ -272,13 +325,19 @@ function buttonclickedtil(clicked_id) {
 }
 
 function søkreise() {
-    console.log(geocoder_fra_data.features[fraclickedid].geometry.coordinates[0])
+   
+
     if(fraInput.value.length == 0 || tilInput.value.length == 0) {
-        alert("Vennligst fyll ut alle feltene")
+        alert("Vennligst fyll ut fra/til feltene")
     } else {
+
+        let søkerEl = document.createElement("p");
+        søkerEl.textContent = "Søker etter reiseforslag..."
+        resultaterEl.appendChild(søkerEl);
+
         let fraValue;
         let toValue;
-        
+
         if (geocoder_fra_data.features[fraclickedid].properties.layer === "address") {
             fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}, name: "${geocoder_fra_data.features[tilclickedid].properties.name}"}`
         } else if (geocoder_fra_data.features[fraclickedid].properties.layer === "venue") {
@@ -316,7 +375,7 @@ function søkreise() {
         method: 'POST',
         headers: {
         // Replace this with your own client name:
-        'ET-Client-Name': 'alsta-bussen',
+        'ET-Client-Name': 'alsta017-reiseplanlegger',
         'Content-Type': 'application/json'
         },
         // GraphQL Query
@@ -388,7 +447,28 @@ function søkreise() {
         })
         .then(res => res.json())
         .then(stopPlaceData => {
+            resultaterEl.removeChild(søkerEl)
             console.log(stopPlaceData);
+            let html = '';
+            const trip = stopPlaceData.data.trip;
+            for (let i = 0; i < trip.tripPatterns.length; i++) {
+
+                const thisTrip = trip.tripPatterns[i];
+
+                const thisDepartureDiv = document.createElement('div');
+                thisDepartureDiv.className = "thisDepartureDiv";
+                thisDepartureDiv.setAttribute("id", i);
+                thisDepartureDiv.setAttribute("onclick", "departureclick(this.id)");
+                
+                const aimedStartTime = document.createElement("div")
+                aimedStartTime.textContent = "Avgang nummer " + i + ": " + new Date(thisTrip.aimedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'}) + "  // (ikke ferdig)";
+                const expectedStartTime = new Date(thisTrip.expectedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+
+                const aimedEndTime = new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+                const expectedEndTime = new Date(thisTrip.expectedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+
+                resultaterEl.appendChild(aimedStartTime)
+            }
         })
     }
 }
@@ -456,4 +536,5 @@ function darkmodecheck() {
     nowbuttonEl.classList.toggle("light_mode5")
     ankomstbuttonEl.classList.toggle("light_mode5")
     avgangbuttonEl.classList.toggle("light_mode5")
+    resultaterEl.classList.toggle("light_mode")
 }
