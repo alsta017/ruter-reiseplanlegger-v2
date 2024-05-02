@@ -34,6 +34,8 @@ let fraclickedid;
 let tilclickedid;
 let geocoder_til_data;
 let geocoder_fra_data;
+let geocoder_til_check;
+let geocoder_fra_check;
 
 // Ikke vise date time picker on start
 datetimepickerEl.style.display = "none";
@@ -163,6 +165,7 @@ function fra_geocoder_fra() {
                 // Definere id og navn for hver stedsnavn
                 var fraId = data.features[x].properties.id;
                 var stasjonsnavn = data.features[x].properties.label;
+                
 
                 // Legge til i html (append)
                 fraVelg.appendChild(stasjonsP);
@@ -195,11 +198,18 @@ function buttonclicked(clicked_id) {
     // Putte samme id i button som i stedArr
     fraInput.value = stedArr[clicked_id - 1];
 
+    localStorage.setItem('lastFrom', fraInput.value);
+
     // Tømme stedArr
     stedArr = [];
 
     // Definere fraVelgClickedId som er iden til knappen som blir trykket
     fraclickedid = clicked_id - 1;
+
+    localStorage.setItem('fraclickedid', fraclickedid);
+
+    const selectedLocation = geocoder_fra_data.features;
+    localStorage.setItem('lastFromLocation', JSON.stringify(selectedLocation));
 
 }
 
@@ -320,16 +330,21 @@ function fra_geocoder_til() {
 function buttonclickedtil(clicked_id) {
     tilVelg.style.display = "none";
     tilInput.value = stedArr2[clicked_id - 1];
+    localStorage.setItem('lastTo', tilInput.value);
     stedArr2 = [];
     tilclickedid = clicked_id - 1;
+    const selectedLocation = geocoder_til_data.features;
+    localStorage.setItem('lastFromLocation', JSON.stringify(selectedLocation));
 }
 
 function søkreise() {
-   
+
 
     if(fraInput.value.length == 0 || tilInput.value.length == 0) {
         alert("Vennligst fyll ut fra/til feltene")
     } else {
+
+        resultaterEl.textContent = "";
 
         let søkerEl = document.createElement("p");
         søkerEl.textContent = "Søker etter reiseforslag..."
@@ -337,6 +352,9 @@ function søkreise() {
 
         let fraValue;
         let toValue;
+
+
+        console.log(geocoder_fra_data, geocoder_til_data);
 
         if (geocoder_fra_data.features[fraclickedid].properties.layer === "address") {
             fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}, name: "${geocoder_fra_data.features[tilclickedid].properties.name}"}`
@@ -366,6 +384,12 @@ function søkreise() {
             timeEl = new Date().toISOString();
             avgangAnkomst = false;
         }
+
+        const lastFromLocation = JSON.parse(localStorage.getItem('lastFromLocation'));
+        const lastToLocation = JSON.parse(localStorage.getItem('lastToLocation'));
+
+        // Now use lastFromLocation and lastToLocation instead of geocoder_fra_data.features[fraclickedid] and geocoder_til_data.features[tilclickedid]
+
         console.log(timeEl)
         console.log(avgangAnkomst)
         console.log(byttetididEl.value)
@@ -379,7 +403,7 @@ function søkreise() {
         'Content-Type': 'application/json'
         },
         // GraphQL Query
-        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-02-01T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
+        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-04-11T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
         body: JSON.stringify({ 
             query: `{
                 trip(
@@ -434,7 +458,7 @@ function søkreise() {
                             }
                             intermediateEstimatedCalls {
                                 quay {
-                                  name
+                                    name
                                 }
                                 aimedArrivalTime
                                 expectedArrivalTime
@@ -447,7 +471,7 @@ function søkreise() {
         })
         .then(res => res.json())
         .then(stopPlaceData => {
-            resultaterEl.removeChild(søkerEl)
+            resultaterEl.textContent = "";
             console.log(stopPlaceData);
             let html = '';
             const trip = stopPlaceData.data.trip;
@@ -460,14 +484,27 @@ function søkreise() {
                 thisDepartureDiv.setAttribute("id", i);
                 thisDepartureDiv.setAttribute("onclick", "departureclick(this.id)");
                 
-                const aimedStartTime = document.createElement("div")
-                aimedStartTime.textContent = "Avgang nummer " + i + ": " + new Date(thisTrip.aimedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'}) + "  // (ikke ferdig)";
-                const expectedStartTime = new Date(thisTrip.expectedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+                const time = document.createElement("div");
+
+                const aimedStartTime = document.createElement("div");
+                const expectedStartTime = document.createElement("div");
+                aimedStartTime.textContent = new Date(thisTrip.aimedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+                expectedStartTime.textContent = new Date(thisTrip.expectedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+
+                if (aimedStartTime.textContent !== expectedStartTime.textContent) {
+                    time.textContent = expectedStartTime.textContent + " (" + aimedStartTime.textContent + ")";
+                } else {
+                    time.textContent = aimedStartTime.textContent
+                }
+                
+                + " - " + new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'})
+                thisDepartureDiv.appendChild(time)                
 
                 const aimedEndTime = new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
                 const expectedEndTime = new Date(thisTrip.expectedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
 
-                resultaterEl.appendChild(aimedStartTime)
+                thisDepartureDiv.appendChild(time)
+                resultaterEl.appendChild(thisDepartureDiv)
             }
         })
     }

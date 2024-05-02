@@ -60,6 +60,23 @@ body{
     padding-right: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     font-size: 100%;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+#fra_input::placeholder, #til_input::placeholder {
+    color: #787878;
+    opacity: 1; /* Firefox */
+    transition-property: color;
+    transition-duration: 0.2s;
+}
+
+#fra_input::-ms-input-placeholder, #til_input::-ms-input-placeholder { /* Edge 12 -18 */
+    color: #787878;
+}
+
+#fra_input[type=text]:hover, #til_input[type=text]:hover, #fra_input[type=text]:focus, #til_input[type=text]:focus{
+    background-color: #393939;
 }
 #fra_input, #til_input{
     margin-bottom: 0px;
@@ -187,6 +204,8 @@ body{
     margin: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     cursor: pointer;
+    transition-property: background-color;
+    transition-duration: 0.2s;
 }
 .velgebutton:hover{
     background-color: #383833;
@@ -340,12 +359,29 @@ body{
     align-items: center;
     text-align: center;
     margin: 8px;
+    padding: 8px;
+    border-radius: 8px;
     font-family: 'TID UI';
     font-size: 150%;
     color: white;
+    background-color: #1F1F1F;
 }
 #resultater.light_mode{
     color: black;
+}
+.thisDepartureDiv{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 4px;
+    font-family: 'TID UI';
+    font-size: 150%;
+    color: white;
+    background-color: #2c2c2c;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 
