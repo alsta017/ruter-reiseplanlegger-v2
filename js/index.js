@@ -553,6 +553,37 @@ function avansert_ekstra_valg() {
     
 }
 
+document.getElementById("ekskludertelinjerInput").addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const inputValue = this.value.trim();
+        if (inputValue != "") {
+            addLineTag(this.value.trim(), 'ekskludertelinjerliste');
+            this.value = "";
+        }
+    }
+});
+
+function addLineTag(line, parentId) {
+    const parent = document.getElementById(parentId);
+    if (parent) {  // Check if the parent element exists
+        const tag = document.createElement('span');
+        tag.classList.add('line-tag');
+        tag.textContent = line;
+        tag.onclick = function() { this.remove(); };  // Remove tag on click
+        parent.appendChild(tag);
+    }
+}
+
+function gatherLineNumbers(parentId) {
+    const parent = document.getElementById(parentId);
+    if (parent) {
+        const tags = parent.getElementsByClassName('line-tag');
+        return Array.from(tags).map(tag => tag.textContent);
+    }
+    return [];  // Return an empty array if parent is not found
+}
+
 function darkmodecheck() {
     var elements = [document.body];
     for(i = 0; i < elements.length; i++) {
@@ -574,4 +605,7 @@ function darkmodecheck() {
     ankomstbuttonEl.classList.toggle("light_mode5")
     avgangbuttonEl.classList.toggle("light_mode5")
     resultaterEl.classList.toggle("light_mode")
+    fraInput.classList.toggle("light_mode4")
+    tilInput.classList.toggle("light_mode4")
+    ekskludertelinjerInput.classList.toggle("light_mode4")
 }

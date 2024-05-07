@@ -78,6 +78,10 @@ body{
 #fra_input[type=text]:hover, #til_input[type=text]:hover, #fra_input[type=text]:focus, #til_input[type=text]:focus{
     background-color: #393939;
 }
+#fra_input[type=text].light_mode4:hover, #til_input[type=text].light_mode4:hover, #fra_input[type=text].light_mode4:focus, #til_input[type=text].light_mode4:focus{
+    background-color: #bfbfbf;
+}
+
 #fra_input, #til_input{
     margin-bottom: 0px;
 }
@@ -262,6 +266,8 @@ body{
     justify-content: center;
     align-items: center;
     flex-flow: row;
+    width: 100%;
+    padding-bottom: 4px;
 }
 #datetimepicker{
     margin-top: 6px;
@@ -270,6 +276,8 @@ body{
     color: white;
     color-scheme: dark;
     width: 100%;
+    padding-bottom: 4px;
+    
 }
 #datetimepicker[type=datetime-local]{
     display: block;
@@ -283,6 +291,15 @@ body{
     padding: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     cursor: pointer;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+}
+#datetimepicker[type=datetime-local]:hover, #datetimepicker[type=datetime-local]:focus{
+    background-color: #383833;
+}
+#datetimepicker.light_mode2{
+    color-scheme: light;
+    background-color: #383833;
 }
 #datetimepicker.light_mode3{
     color-scheme: light;
@@ -291,6 +308,9 @@ body{
     color-scheme: light;
     background-color: #cccccc;
     color: black;
+}
+#datetimepicker[type=datetime-local].light_mode2:hover, #datetimepicker[type=datetime-local].light_mode2:focus{
+    background-color: #b2b2b2;
 }
 .ekstrabutton{
     font-family: 'TID UI';
@@ -313,6 +333,7 @@ body{
     display: none;
     font-family: 'TID UI';
     margin-top: 8px;
+    flex-flow: column;
 }
 #byttetidid{
     display: block;
@@ -348,6 +369,68 @@ body{
     background-color: #cccccc;
     color: black;
 }
+#ekskludertelinjerdiv p{
+    font-size: 200%;
+    margin: 8px;
+}
+#ekskludertelinjerdiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    background-color: #2c2c2c;
+    color: white;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    margin-bottom: 4px;
+    width: 56%;
+}
+#ekskludertelinjerdivline1{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 2px;
+    border-bottom: 1px dashed white;
+}
+#ekskludertelinjerInput[type=text]{
+    display: block;
+    font-family: 'TID UI';
+    font-size: 150%;
+    width: 20%;
+    border-radius: 8px;
+    border: none;
+    background-color: #383838;
+    color: white;
+    padding: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    cursor: pointer;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+    margin-left: 8px;
+}
+#ekskludertelinjerInput[type=text]:hover, #ekskludertelinjerdiv.input[type=text]:focus{
+    background-color: #454545;
+}
+#ekskludertelinjerInput[type=text].light_mode4{
+    background-color: #b2b2b2;
+    color: black;
+}
+#ekskludertelinjerInput[type=text].light_mode4:hover, #ekskludertelinjerdiv.input[type=text].light_mode4:focus{
+    background-color: #a5a5a5;
+}
+
+#ekskludertelinjerliste{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 4px;
+}
+
 #byttetidid.light_mode{
     background-color: #b2b2b2;
     color: black;
@@ -365,10 +448,13 @@ body{
     font-size: 150%;
     color: white;
     background-color: #1F1F1F;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 #resultater.light_mode{
     color: black;
+    background-color: #e5e5e5;
 }
+
 .thisDepartureDiv{
     display: flex;
     flex-flow: column;
@@ -382,6 +468,22 @@ body{
     background-color: #2c2c2c;
     padding: 8px;
     border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+#resultater.light_mode .thisDepartureDiv{
+    background-color: #cccccc;
+    color: black;
+}
+.line-tag{
+    font-family: 'TID UI';
+    font-size: 150%;
+    padding: 4px;
+    margin: 4px;
+    border-radius: 8px;
+    background-color: #E60000;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
 }
 
 
