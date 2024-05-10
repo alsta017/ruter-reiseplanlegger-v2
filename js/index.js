@@ -463,6 +463,9 @@ function søkreise() {
                                 aimedArrivalTime
                                 expectedArrivalTime
                             }
+                            authority {
+                                name
+                            }
                         }
                     }
                 }
@@ -485,25 +488,85 @@ function søkreise() {
                 thisDepartureDiv.setAttribute("onclick", "departureclick(this.id)");
                 
                 const time = document.createElement("div");
+                time.className = "allTime";
 
                 const aimedStartTime = document.createElement("div");
                 const expectedStartTime = document.createElement("div");
+                aimedStartTime.className = "aimedStartTime";
+                expectedStartTime.className = "expectedStartTime";
                 aimedStartTime.textContent = new Date(thisTrip.aimedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
                 expectedStartTime.textContent = new Date(thisTrip.expectedStartTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
 
                 if (aimedStartTime.textContent !== expectedStartTime.textContent) {
-                    time.textContent = expectedStartTime.textContent + " (" + aimedStartTime.textContent + ")";
+                    aimedStartTime.textContent = " (" + aimedStartTime.textContent + ")";
+                    aimedStartTime.classList = "aimedStartTime smaller";
+                    time.appendChild(expectedStartTime);
+                    time.appendChild(aimedStartTime);
                 } else {
-                    time.textContent = aimedStartTime.textContent
+                    time.appendChild(aimedStartTime);
+                };
+
+                const separatorLine = document.createElement("div");
+                separatorLine.className = "separatorLine";
+                separatorLine.textContent = "-";
+
+                time.appendChild(separatorLine)
+
+                const aimedEndTime = document.createElement("div");
+                const expectedEndTime = document.createElement("div");
+                aimedEndTime.className = "aimedEndTime";
+                expectedEndTime.className = "expectedEndTime";
+                aimedEndTime.textContent = new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+                expectedEndTime.textContent = new Date(thisTrip.expectedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
+                if (aimedEndTime.textContent !== expectedEndTime.textContent) {
+                    aimedEndTime.textContent = " (" + aimedEndTime.textContent + ")";
+                    aimedEndTime.classList = "aimedEndTime smaller";
+                    time.appendChild(expectedEndTime);
+                    time.appendChild(aimedEndTime);
+                } else {
+                    time.appendChild(aimedEndTime);
+                };
+                
+                thisDepartureDiv.appendChild(time)
+
+                const lines = document.createElement("div");
+                lines.className = "linesDiv";
+                
+                for(let j = 0; j < thisTrip.legs.length; j++) {
+                    const line = document.createElement("div");
+
+                    if (thisTrip.legs[j].mode === "bus") {
+                        line.textContent = thisTrip.legs[j].line.publicCode;
+                        if (thisTrip.legs[j].authority.name === "Ruter") {
+
+                            const thisPubliCode = thisTrip.legs[j].line.publicCode;
+    
+                            const redSpecialLines = ["110", "100", "300", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
+                            const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
+    
+                            if (thisPubliCode > 0 && thisPubliCode < 10) {
+                                line.classList = "line orange";
+                            } else if (thisPubliCode > 9 && thisPubliCode < 20) {
+                                line.classList = "line blue";
+                            } else if (thisPubliCode.length > 1 && (redSpecialLines.includes(thisPubliCode) || (thisPubliCode > '19' && thisPubliCode < '99'))) {
+                                line.classList = "line red";
+                            } else if (thisPubliCode.length > 1 && (greenSpecialLines.includes(thisPubliCode) || (thisPubliCode > '100' && thisPubliCode < '4000'))) {
+                                line.classList = "line green";
+                            } else {
+                                line.classList = "line gray";
+                            }
+                        }
+                    }
+
+
+
+                    line.className = "line";
+
+                    lines.appendChild(line);
                 }
                 
-                + " - " + new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'})
-                thisDepartureDiv.appendChild(time)                
-
-                const aimedEndTime = new Date(thisTrip.aimedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
-                const expectedEndTime = new Date(thisTrip.expectedEndTime).toLocaleTimeString('nb-NO', {hour: '2-digit', minute: '2-digit'});
-
                 thisDepartureDiv.appendChild(time)
+                thisDepartureDiv.appendChild(lines)
                 resultaterEl.appendChild(thisDepartureDiv)
             }
         })
