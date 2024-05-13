@@ -534,8 +534,8 @@ function søkreise() {
                 
                 for(let j = 0; j < thisTrip.legs.length; j++) {
                     const line = document.createElement("div");
-
-                    if (thisTrip.legs[j].mode === "bus") {
+                    line.className = "line";
+                    if (thisTrip.legs[j].mode === "bus" || thisTrip.legs[j].mode === "tram" || thisTrip.legs[j].mode === "metro") {
                         line.textContent = thisTrip.legs[j].line.publicCode;
                         if (thisTrip.legs[j].authority.name === "Ruter") {
 
@@ -545,22 +545,40 @@ function søkreise() {
                             const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
     
                             if (thisPubliCode > 0 && thisPubliCode < 10) {
-                                line.classList = "line orange";
+                                line.className = "line orange";
                             } else if (thisPubliCode > 9 && thisPubliCode < 20) {
-                                line.classList = "line blue";
-                            } else if (thisPubliCode.length > 1 && (redSpecialLines.includes(thisPubliCode) || (thisPubliCode > '19' && thisPubliCode < '99'))) {
-                                line.classList = "line red";
-                            } else if (thisPubliCode.length > 1 && (greenSpecialLines.includes(thisPubliCode) || (thisPubliCode > '100' && thisPubliCode < '4000'))) {
-                                line.classList = "line green";
+                                line.className = "line blue";
+                            } else if (thisPubliCode > 19 && thisPubliCode < 99 || redSpecialLines.includes(thisPubliCode)) {
+                                line.className = "line red";
+                            } else if (thisPubliCode > 100 && thisPubliCode < 4000 || greenSpecialLines.includes(thisPubliCode)) {
+                                line.className = "line green";
                             } else {
-                                line.classList = "line gray";
+                                line.className = "line gray";
                             }
                         }
+                    } else if (thisTrip.legs[j].mode === "foot") {
+                        let ielement = document.createElement("i");
+                        ielement.className = "fa-solid fa-person-walking";
+                        line.className = "line walk";
+                        line.appendChild(ielement);
+                    } else if (thisTrip.legs[j].mode === "rail") {
+                        if (thisTrip.legs[j].line.publicCode) {
+                            const thisPublicCode = thisTrip.legs[j].line.publicCode;
+                            line.textContent = thisPublicCode;
+                            line.className = "line train";
+                        } else {
+                            let ielement = document.createElement("i");
+                            ielement.className = "fa-solid fa-train";
+                            line.appendChild(ielement);
+                            line.className = "line train";
+                        }
+                        
+                    } else if (thisTrip.legs[j].mode === "water") {
+                        line.className = "line boat";
+                    } else if (thisTrip.legs[j].line.publicCode) {
+                        line.className = "line unknown";
+                        line.textContent = thisTrip.legs[j].line.publicCode;
                     }
-
-
-
-                    line.className = "line";
 
                     lines.appendChild(line);
                 }

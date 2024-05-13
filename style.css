@@ -439,13 +439,13 @@ body{
     display: flex;
     flex-flow: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     text-align: center;
     margin: 8px;
     padding: 8px;
     border-radius: 8px;
     font-family: 'TID UI';
-    font-size: 150%;
+    font-size: 175%;
     color: white;
     background-color: #1F1F1F;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -475,6 +475,11 @@ body{
     flex-flow: row;
     justify-content: center;
     align-items: center;
+    background-color: #383838;
+    border-radius: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .separatorLine{
     margin-left: 4px;
@@ -489,13 +494,13 @@ body{
     flex-flow: row;
     justify-content: center;
     align-items: center;
+    margin-left: 8px;
 }
 .line {
     font-family: 'TID UI';
     font-size: 80%;
     padding: 4px;
     border-radius: 8px;
-    background-color: #E60000;
     color: white;
     margin-left: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -504,6 +509,24 @@ body{
 #resultater.light_mode .thisDepartureDiv{
     background-color: #cccccc;
     color: black;
+}
+.red{
+    background-color: #E60000;
+}
+.orange{
+    background-color: #EC700C;
+}
+.green{
+    background-color: #80bd00;
+}
+.walk{
+    background-color: #383838;
+}
+.train{
+    background-color: blue;
+}
+.unknown{
+    background-color: gray;
 }
 .line-tag{
     font-family: 'TID UI';
