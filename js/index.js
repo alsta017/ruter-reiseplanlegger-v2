@@ -635,8 +635,12 @@ function søkreise() {
     )};
 }
 
-function departureclick2(id) {
-    const map = L.map('map').setView([59.91, 10.75], 13);
+var map;
+
+function departureclick(id) {
+    document.getElementById('overlay').style.display = 'flex';
+
+    map = L.map('map').setView([59.91, 10.75], 13);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
         foo: 'bar',
@@ -657,26 +661,17 @@ function departureclick2(id) {
         L.marker([trip.tripPatterns[id].legs[p].toPlace.quay.latitude, trip.tripPatterns[id].legs[p].toPlace.quay.longitude]).addTo(map)
             .bindPopup(trip.tripPatterns[id].legs[p].toPlace.quay.name)
             .openPopup();
+        
     };
     
-    L.marker([59.91, 10.75]).addTo(map)
-        .bindPopup('Stedsnavn')
-        .openPopup();
-
-    // Invalidate size after a slight delay to ensure the container is visible
-    setTimeout(function() {
-        map.invalidateSize();
-    }, 100);
-}
-function departureclick(id) {
-    document.getElementById('overlay').style.display = 'flex';
-    departureclick2(id);
 }
 
 // Function to close the overlay
 function closeOverlay() {
     document.getElementById('overlay').style.display = 'none';
-}
+    map.off();
+    map.remove();
+};
 
 function avgang() {
     nowbuttonEl.classList.remove("selected");
