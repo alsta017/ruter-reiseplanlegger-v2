@@ -642,9 +642,10 @@ function departureclick(id) {
 
     map = L.map('map').setView([59.91, 10.75], 13);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
-        foo: 'bar',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    L.tileLayer('https://api.mapbox.com/styles/v1/alsta017/clwp2bnwm012q01qsa7c68bz9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxzdGEwMTciLCJhIjoiY2xtb3BiN2hxMTZqMDJpczVnbXNqajl0diJ9.Pq21tHInwnQFkKvyOZkG9Q', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     }).addTo(map);
 
     console.log(trip);
