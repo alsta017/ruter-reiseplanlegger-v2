@@ -22,6 +22,7 @@ let arrowEl = document.getElementById("arrow");
 let byttetididEl = document.getElementById("byttetidid");
 let byttetiddivEl = document.getElementById("byttetiddiv");
 let resultaterEl = document.getElementById("resultater")
+let trip;
 
 // Definere generelle variabler som skal bruke senere
 let velgArr = [];
@@ -403,7 +404,7 @@ function søkreise() {
         'Content-Type': 'application/json'
         },
         // GraphQL Query
-        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-04-11T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
+        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-05-27T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
         body: JSON.stringify({ 
             query: `{
                 trip(
@@ -449,12 +450,19 @@ function søkreise() {
                             fromPlace {
                                 quay {
                                     name
+                                    latitude
+                                    longitude
                                 }
                             }
                             toPlace {
                                 quay {
                                     name
+                                    latitude
+                                    longitude
                                 }
+                            }
+                            pointsOnLink {
+                                points
                             }
                             intermediateEstimatedCalls {
                                 quay {
@@ -477,7 +485,7 @@ function søkreise() {
             resultaterEl.textContent = "";
             console.log(stopPlaceData);
             let html = '';
-            const trip = stopPlaceData.data.trip;
+            trip = stopPlaceData.data.trip;
             for (let i = 0; i < trip.tripPatterns.length; i++) {
 
                 const thisTrip = trip.tripPatterns[i];
@@ -535,79 +543,140 @@ function søkreise() {
                 for(let j = 0; j < thisTrip.legs.length; j++) {
                     const line = document.createElement("div");
                     line.className = "line";
-                    if (thisTrip.legs[j].authority) {
-                        if (thisTrip.legs[j].authority.name === "Ruter") {
-                            if (thisTrip.legs[j].mode === "bus" || thisTrip.legs[j].mode === "tram" || thisTrip.legs[j].mode === "metro") {
-                                line.textContent = thisTrip.legs[j].line.publicCode;
-
-                                const thisPubliCode = thisTrip.legs[j].line.publicCode;
-            
-                                const redSpecialLines = ["110", "100", "300", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
-                                const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
-            
-                                if (thisPubliCode > 0 && thisPubliCode < 10) {
-                                    line.className = "line orange";
-                                } else if (thisPubliCode > 9 && thisPubliCode < 20) {
-                                    line.className = "line blue";
-                                } else if (thisPubliCode > 19 && thisPubliCode < 99 || redSpecialLines.includes(thisPubliCode)) {
-                                    line.className = "line red";
-                                } else if (thisPubliCode > 100 && thisPubliCode < 4000 || greenSpecialLines.includes(thisPubliCode)) {
-                                    line.className = "line green";
-                                } else {
+                    if (thisTrip.legs[j].line) {
+                        if (thisTrip.legs[j].authority) {
+                            if (thisTrip.legs[j].authority.name === "Ruter") {
+                                if (thisTrip.legs[j].mode === "bus" || thisTrip.legs[j].mode === "tram" || thisTrip.legs[j].mode === "metro") {
+                                    line.textContent = thisTrip.legs[j].line.publicCode;
+    
+                                    const thisPubliCode = thisTrip.legs[j].line.publicCode;
+                
+                                    const redSpecialLines = ["110", "100", "300", "300E", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
+                                    const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
+                
+                                    if (thisPubliCode > 0 && thisPubliCode < 10) {
+                                        line.className = "line orange";
+                                    } else if (thisPubliCode > 9 && thisPubliCode < 20) {
+                                        line.className = "line blue";
+                                    } else if (thisPubliCode > 19 && thisPubliCode < 99 || redSpecialLines.includes(thisPubliCode)) {
+                                        line.className = "line red";
+                                    } else if (thisPubliCode > 100 && thisPubliCode < 4000 || greenSpecialLines.includes(thisPubliCode)) {
+                                        line.className = "line green";
+                                    } else {
+                                        line.className = "line gray";
+                                    }
+                                } else if (thisTrip.legs[j].mode === "water") {
+                                    line.className = "line boat";
+                                } else if (thisTrip.legs[j].line.publicCode) {
                                     line.className = "line gray";
+                                    line.textContent = thisTrip.legs[j].line.publicCode;
                                 }
-                            } else if (thisTrip.legs[j].mode === "water") {
-                                line.className = "line boat";
-                            } else if (thisTrip.legs[j].line.publicCode) {
-                                line.className = "line unknown";
-                                line.textContent = thisTrip.legs[j].line.publicCode;
+                            } else {
+                                if (thisTrip.legs[j].line) {
+                                    line.textContent = thisTrip.legs[j].line.publicCode;
+                                    line.className = "line gray"
+                                }
                             }
                         } else {
                             if (thisTrip.legs[j].line) {
                                 line.textContent = thisTrip.legs[j].line.publicCode;
-                                line.className = "line unknown"
-                            } else {
-                                let ielement = document.createElement("i");
-                                if (thisTrip.legs[j].mode === "air") {
-                                    ielement.className = "fa-solid fa-plane";
-                                } else if (thisTrip.legs[j].mode === "bicycle") {
-                                    ielement.className = "fa-solid fa-bicycle";
-                                } else if (thisTrip.legs[j].mode === "bus") {
-                                    ielement.className = "fa-solid fa-bus";
-                                } else if (thisTrip.legs[j].mode === "cableway") {
-                                    ielement.className = "fa-solid fa-cable-car";
-                                } else if (thisTrip.legs[j].mode === "water") {
-                                    ielement.className = "fa-solid fa-ferry";
-                                } else if (thisTrip.legs[j].mode === "funicular") {
-                                    ielement.className = "fa-solid fa-subway";
-                                } else if (thisTrip.legs[j].mode === "lift") {
-                                    ielement.className = "fa-solid fa-elevator";
-                                } else if (thisTrip.legs[j].mode === "rail") {
-                                    ielement.className = "fa-solid fa-train";
-                                } else if (thisTrip.legs[j].mode === "metro") {
-                                    ielement.className = "fa-solid fa-train-subway";
-                                } else if (thisTrip.legs[j].mode === "taxi") {
-                                    ielement.className = "fa-solid fa-taxi";
-                                } else if (thisTrip.legs[j].mode === "tram") {
-                                    ielement.className = "fa-solid fa-train-tram";
-                                } else if (thisTrip.legs[j].mode === "trolleybus") {
-                                    ielement.classList = "fa-solid fa-bus"
-                                } else if (thisTrip.legs)
-                            } // HUSK Å FORSTETET ELLER NOE SÅNT
+                                line.className = "line gray"
+                            }
                         }
-                    }
-                    lines.appendChild(line);
-                    
+                    } else {
+                        let ielement = document.createElement("i");
+                        line.className = "line gray";
+                        if (thisTrip.legs[j].mode === "air") {
+                            ielement.className = "fa-solid fa-plane";
+                        } else if (thisTrip.legs[j].mode === "bicycle") {
+                            ielement.className = "fa-solid fa-bicycle";
+                        } else if (thisTrip.legs[j].mode === "bus") {
+                            ielement.className = "fa-solid fa-bus";
+                        } else if (thisTrip.legs[j].mode === "cableway") {
+                            ielement.className = "fa-solid fa-cable-car";
+                        } else if (thisTrip.legs[j].mode === "water") {
+                            ielement.className = "fa-solid fa-ferry";
+                        } else if (thisTrip.legs[j].mode === "funicular") {
+                            ielement.className = "fa-solid fa-subway";
+                        } else if (thisTrip.legs[j].mode === "lift") {
+                            ielement.className = "fa-solid fa-elevator";
+                        } else if (thisTrip.legs[j].mode === "rail") {
+                            ielement.className = "fa-solid fa-train";
+                        } else if (thisTrip.legs[j].mode === "metro") {
+                            ielement.className = "fa-solid fa-train-subway";
+                        } else if (thisTrip.legs[j].mode === "taxi") {
+                            ielement.className = "fa-solid fa-taxi";
+                        } else if (thisTrip.legs[j].mode === "tram") {
+                            ielement.className = "fa-solid fa-train-tram";
+                        } else if (thisTrip.legs[j].mode === "trolleybus") {
+                            ielement.classList = "fa-solid fa-bus"
+                        } else if (thisTrip.legs[j].mode === "monorail") {
+                            ielement.className = "fa-solid fa-train-subway";
+                        } else if (thisTrip.legs[j].mode === "coach") {
+                            ielement.className = "fa-solid fa-bus";
+                        } else if (thisTrip.legs[j].mode === "foot") {
+                            ielement.className = "fa-solid fa-person-walking";
+                        } else if (thisTrip.legs[j].mode === "car") {
+                            ielement.className = "fa-solid fa-car";
+                        } else if (thisTrip.legs[j].mode === "scooter") {
+                            ielement.className = "fa-solid fa-bicycle";
+                        } else {
+                            ielement.className = "fa-solid fa-question";
+                        }
+                        line.appendChild(ielement);
+                    } // HUSK Å FORSTETET ELLER NOE SÅNT
+                lines.appendChild(line);
                 }
-                
-                thisDepartureDiv.appendChild(time)
-                thisDepartureDiv.appendChild(lines)
-                resultaterEl.appendChild(thisDepartureDiv)
+            thisDepartureDiv.appendChild(time)
+            thisDepartureDiv.appendChild(lines)
+            resultaterEl.appendChild(thisDepartureDiv)
             }
-        })
-    }
+        }
+    )};
 }
 
+function departureclick2(id) {
+    const map = L.map('map').setView([59.91, 10.75], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {
+        foo: 'bar',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    console.log(trip);
+    for (let p = 0; p < trip.tripPatterns[id].legs.length; p++) {
+        let encodedPolyLine = trip.tripPatterns[id].legs[p].pointsOnLink.points;
+        let decodedPolyLine = L.PolylineUtil.decode(encodedPolyLine);
+        let polyLine = L.polyline(decodedPolyLine);
+        polyLine.addTo(map);
+
+        L.marker([trip.tripPatterns[id].legs[p].fromPlace.quay.latitude, trip.tripPatterns[id].legs[p].fromPlace.quay.longitude]).addTo(map)
+            .bindPopup(trip.tripPatterns[id].legs[p].fromPlace.quay.name)
+            .openPopup();
+        
+        L.marker([trip.tripPatterns[id].legs[p].toPlace.quay.latitude, trip.tripPatterns[id].legs[p].toPlace.quay.longitude]).addTo(map)
+            .bindPopup(trip.tripPatterns[id].legs[p].toPlace.quay.name)
+            .openPopup();
+    };
+    
+    L.marker([59.91, 10.75]).addTo(map)
+        .bindPopup('Stedsnavn')
+        .openPopup();
+
+    // Invalidate size after a slight delay to ensure the container is visible
+    setTimeout(function() {
+        map.invalidateSize();
+    }, 100);
+}
+function departureclick(id) {
+    document.getElementById('overlay').style.display = 'flex';
+    departureclick2(id);
+}
+
+// Function to close the overlay
+function closeOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+}
 
 function avgang() {
     nowbuttonEl.classList.remove("selected");
