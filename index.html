@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 </head>
 <body>
     <div class="page_wrapper">
@@ -68,8 +66,9 @@
         </div>
     </div>
     <div class="overlay" id="overlay">
-        <button class="close-overlay" onclick="closeOverlay()">Close</button>
-        <div id="details"></div>
+        <button class="close-overlay" onclick="closeOverlay()"><i class="fa-solid fa-xmark"></i></button>
+        <div id="details">
+            <h1>Reiseinformasjon</h1></div>
         <div id="map"></div>
     </div>
     <script src="js/index.js"></script>
@@ -77,5 +76,6 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
     <script src="https://unpkg.com/polyline-encoded@latest"></script>
+    <script src="https://unpkg.com/leaflet-polylinedecorator@latest"></script>
 </body>
 </html>

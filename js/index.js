@@ -23,6 +23,8 @@ let byttetididEl = document.getElementById("byttetidid");
 let byttetiddivEl = document.getElementById("byttetiddiv");
 let resultaterEl = document.getElementById("resultater")
 let trip;
+const redSpecialLines = ["110", "100", "300", "300E", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
+const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
 
 // Definere generelle variabler som skal bruke senere
 let velgArr = [];
@@ -404,7 +406,7 @@ function søkreise() {
         'Content-Type': 'application/json'
         },
         // GraphQL Query
-        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-05-27T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
+        // https://api.entur.io/graphql-explorer/journey-planner-v3?query=%7B%0A%20%20trip%28%0A%20%20%20%20from%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A58227"%7D%0A%20%20%20%20to%3A%20%7Bplace%3A%20"NSR%3AStopPlace%3A5920"%7D%0A%20%20%20%20dateTime%3A%20"2024-05-27T16%3A00%3A00.000Z"%0A%20%20%20%20walkSpeed%3A%201.3%0A%20%20%20%20arriveBy%3A%20false%0A%20%20%20%20includePlannedCancellations%3A%20true%0A%20%20%20%20includeRealtimeCancellations%3A%20true%0A%20%20%20%20transferSlack%3A%205%0A%20%20%29%20%7B%0A%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20name%0A%20%20%20%20%7D%0A%20%20%20%20tripPatterns%20%7B%0A%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20streetDistance%0A%20%20%20%20%20%20walkTime%0A%20%20%20%20%20%20duration%0A%20%20%20%20%20%20legs%20%7B%0A%20%20%20%20%20%20%20%20aimedStartTime%0A%20%20%20%20%20%20%20%20expectedStartTime%0A%20%20%20%20%20%20%20%20aimedEndTime%0A%20%20%20%20%20%20%20%20expectedEndTime%0A%20%20%20%20%20%20%20%20mode%0A%20%20%20%20%20%20%20%20duration%0A%20%20%20%20%20%20%20%20line%20%7B%0A%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromEstimatedCall%20%7B%0A%20%20%20%20%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20cancellation%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20fromPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20toPlace%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20intermediateEstimatedCalls%20%7B%0A%20%20%20%20%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20name%0A%20%20%20%20%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20aimedArrivalTime%0A%20%20%20%20%20%20%20%20%20%20expectedArrivalTime%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=
         body: JSON.stringify({ 
             query: `{
                 trip(
@@ -453,6 +455,9 @@ function søkreise() {
                                     latitude
                                     longitude
                                 }
+                                latitude
+                                longitude
+                                name
                             }
                             toPlace {
                                 quay {
@@ -460,6 +465,9 @@ function søkreise() {
                                     latitude
                                     longitude
                                 }
+                                latitude
+                                longitude
+                                name
                             }
                             pointsOnLink {
                                 points
@@ -467,6 +475,8 @@ function søkreise() {
                             intermediateEstimatedCalls {
                                 quay {
                                     name
+                                    latitude
+                                    longitude
                                 }
                                 aimedArrivalTime
                                 expectedArrivalTime
@@ -551,9 +561,6 @@ function søkreise() {
     
                                     const thisPubliCode = thisTrip.legs[j].line.publicCode;
                 
-                                    const redSpecialLines = ["110", "100", "300", "300E", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
-                                    const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
-                
                                     if (thisPubliCode > 0 && thisPubliCode < 10) {
                                         line.className = "line orange";
                                     } else if (thisPubliCode > 9 && thisPubliCode < 20) {
@@ -567,10 +574,14 @@ function søkreise() {
                                     }
                                 } else if (thisTrip.legs[j].mode === "water") {
                                     line.className = "line boat";
+                                    line.textContent = thisTrip.legs[j].line.publicCode;
                                 } else if (thisTrip.legs[j].line.publicCode) {
                                     line.className = "line gray";
                                     line.textContent = thisTrip.legs[j].line.publicCode;
                                 }
+                            } else if (thisTrip.legs[j].authority.name === "Vy" || thisTrip.legs[j].authority.name === "NSB" || thisTrip.legs[j].authority.name === "GJB") {
+                                line.className = "line train";
+                                line.textContent = thisTrip.legs[j].line.publicCode;
                             } else {
                                 if (thisTrip.legs[j].line) {
                                     line.textContent = thisTrip.legs[j].line.publicCode;
@@ -640,31 +651,96 @@ var map;
 function departureclick(id) {
     document.getElementById('overlay').style.display = 'flex';
 
+    // Initialize the map centered on a specific location with a given zoom level
     map = L.map('map').setView([59.91, 10.75], 13);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/alsta017/clwp2bnwm012q01qsa7c68bz9/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYWxzdGEwMTciLCJhIjoiY2xtb3BiN2hxMTZqMDJpczVnbXNqajl0diJ9.Pq21tHInwnQFkKvyOZkG9Q', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    // Replace the Mapbox tile layer with the OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        maxZoom: 19
     }).addTo(map);
 
+    // Log the trip object (assuming it's defined globally or in the enclosing scope)
     console.log(trip);
+
+    // Iterate through the trip patterns and add polylines and markers to the map
     for (let p = 0; p < trip.tripPatterns[id].legs.length; p++) {
         let encodedPolyLine = trip.tripPatterns[id].legs[p].pointsOnLink.points;
         let decodedPolyLine = L.PolylineUtil.decode(encodedPolyLine);
-        let polyLine = L.polyline(decodedPolyLine);
+        
+        let polylineColor;
+        if (trip.tripPatterns[id].legs[p].authority) {
+            if (trip.tripPatterns[id].legs[p].authority.name === "Ruter") {
+                let thisTripCode = trip.tripPatterns[id].legs[p].line.publicCode;
+
+                if (thisTripCode > 0 && thisTripCode < 10) {
+                    polylineColor = "#EC700C";
+                } else if (thisTripCode > 9 && thisTripCode < 20) {
+                    polylineColor = "#0B91EF";
+                } else if (thisTripCode > 19 && thisTripCode < 99 || redSpecialLines.includes(thisTripCode)) {
+                    polylineColor = "#E60000";
+                } else if (thisTripCode > 100 && thisTripCode < 4000 || greenSpecialLines.includes(thisTripCode)) {
+                    polylineColor = "#76A300";
+                } else {
+                    polylineColor = "#383838";
+                }
+            } else {
+                polylineColor = "#383838";
+            }
+        } else {
+            polylineColor = "#383838";
+        };
+
+        let polyLine = L.polyline(decodedPolyLine, { color: polylineColor, weight: 6 });
         polyLine.addTo(map);
 
-        L.marker([trip.tripPatterns[id].legs[p].fromPlace.quay.latitude, trip.tripPatterns[id].legs[p].fromPlace.quay.longitude]).addTo(map)
+        let PlaceIcon = L.divIcon({
+            className: 'place-icon',
+            html: `<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="15" cy="15" r="7.5" fill="white" stroke="${polylineColor}" stroke-width="3"/></svg>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });        
+
+        if (trip.tripPatterns[id].legs[p].fromPlace.quay) {
+        L.marker([trip.tripPatterns[id].legs[p].fromPlace.latitude, trip.tripPatterns[id].legs[p].fromPlace.longitude], { icon: PlaceIcon }).addTo(map)
             .bindPopup(trip.tripPatterns[id].legs[p].fromPlace.quay.name)
             .openPopup();
-        
-        L.marker([trip.tripPatterns[id].legs[p].toPlace.quay.latitude, trip.tripPatterns[id].legs[p].toPlace.quay.longitude]).addTo(map)
+        } else {
+            L.marker([trip.tripPatterns[id].legs[p].fromPlace.latitude, trip.tripPatterns[id].legs[p].fromPlace.longitude], { icon: PlaceIcon }).addTo(map)
+            .bindPopup(trip.tripPatterns[id].legs[p].fromPlace.name)
+            .openPopup();
+        }
+
+        if (trip.tripPatterns[id].legs[p].toPlace.quay) {
+            L.marker([trip.tripPatterns[id].legs[p].toPlace.latitude, trip.tripPatterns[id].legs[p].toPlace.longitude], { icon: PlaceIcon }).addTo(map)
             .bindPopup(trip.tripPatterns[id].legs[p].toPlace.quay.name)
             .openPopup();
+        } else {
+            L.marker([trip.tripPatterns[id].legs[p].toPlace.latitude, trip.tripPatterns[id].legs[p].toPlace.longitude], { icon: PlaceIcon }).addTo(map)
+            .bindPopup(trip.tripPatterns[id].legs[p].toPlace.name)
+            .openPopup();
+        }
+
+        let intermediateIcon = L.divIcon({
+            className: 'intermediate-icon',
+            html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="5" cy="5" r="5" fill="white" stroke="${polylineColor}" stroke-width="2"/></svg>`,
+            iconSize: [10, 10],
+            iconAnchor: [5, 5],
+            popupAnchor: [0, -15]
+        });
         
-    };
-    
+
+        if (trip.tripPatterns[id].legs[p].intermediateEstimatedCalls) {
+            for (let l = 0; l < trip.tripPatterns[id].legs[p].intermediateEstimatedCalls.length; l++) {
+                L.marker([trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.latitude, trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.longitude], { icon: intermediateIcon }).addTo(map)
+                .bindPopup(trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.name)
+                .openPopup();
+            }
+        }
+    }
 }
 
 // Function to close the overlay

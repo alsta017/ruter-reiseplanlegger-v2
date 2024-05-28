@@ -523,10 +523,19 @@ body{
     background-color: #383838;
 }
 .train{
-    background-color: blue;
+    background-color: #245EE3;
 }
 .gray{
     background-color: #383838;
+}
+.blue{
+    background-color: #0B91EF;
+}
+.boat{
+    background-color: #682c88;
+}
+.place-icon{
+    border-radius: 16px;
 }
 .line-tag{
     font-family: 'TID UI';
@@ -550,6 +559,10 @@ body{
     z-index: 1000;
 }
 #details{
+    font-family: 'TID UI';
+    display: flex;
+    flex-flow: column;
+    align-items: center;
     height: 100%;
     width: 30%;
     float: left;
