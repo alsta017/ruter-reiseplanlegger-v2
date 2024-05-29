@@ -663,6 +663,13 @@ function departureclick(id) {
     // Log the trip object (assuming it's defined globally or in the enclosing scope)
     console.log(trip);
 
+    let detailsEl = document.getElementById("details")
+
+    let reiseoversikth1 = document.createElement("h1");
+    reiseoversikth1.textContent = "Fra " + trip.fromPlace.name + " til " + trip.toPlace.name;
+    reiseoversikth1.className = "Reiseoversikt_h1"
+    detailsEl.appendChild(reiseoversikth1);
+
     // Iterate through the trip patterns and add polylines and markers to the map
     for (let p = 0; p < trip.tripPatterns[id].legs.length; p++) {
         let encodedPolyLine = trip.tripPatterns[id].legs[p].pointsOnLink.points;
@@ -723,6 +730,39 @@ function departureclick(id) {
             .openPopup();
         }
 
+        function getExactMidpoint(latlngs) {
+            // Calculate the index of the middle point
+            let midIndex = Math.floor(latlngs.length / 2);
+            
+            // Check if the number of points is even
+            if (latlngs.length % 2 === 0) {
+                // If even, interpolate between the two middle points
+                let midPoint1 = latlngs[midIndex - 1];
+                let midPoint2 = latlngs[midIndex];
+                // Return the average of the two middle points
+                return [(midPoint1[0] + midPoint2[0]) / 2, (midPoint1[1] + midPoint2[1]) / 2];
+            } else {
+                // If odd, return the middle point
+                return latlngs[midIndex];
+            }
+        }
+        
+        let midpoint = getExactMidpoint(decodedPolyLine);
+        let thisDeparture = trip.tripPatterns[id].legs[p];
+        
+        if (thisDeparture.line) {
+            let midpointIcon = L.divIcon({
+                className: 'midpoint-icon',
+                html: `<div class="icon-box" style="background-color: ${polylineColor};">
+                            <span class="icon-number">${thisDeparture.line.publicCode}</span>  <!-- This sets the text content to the line number -->
+                    </div>`,
+                iconSize: [20, 20],  // Adjust the size as needed
+                iconAnchor: [10, 10],  // Center the icon
+                popupAnchor: [0, -15]
+            });
+            L.marker(midpoint, { icon: midpointIcon }).addTo(map);
+        }
+
         let intermediateIcon = L.divIcon({
             className: 'intermediate-icon',
             html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
@@ -730,8 +770,7 @@ function departureclick(id) {
             iconSize: [10, 10],
             iconAnchor: [5, 5],
             popupAnchor: [0, -15]
-        });
-        
+        });        
 
         if (trip.tripPatterns[id].legs[p].intermediateEstimatedCalls) {
             for (let l = 0; l < trip.tripPatterns[id].legs[p].intermediateEstimatedCalls.length; l++) {
@@ -739,6 +778,34 @@ function departureclick(id) {
                 .bindPopup(trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.name)
                 .openPopup();
             }
+        }
+        
+        let tripDiv = document.createElement("div");
+        tripDiv.className = "tripDiv";
+        
+        let legDiv = document.createElement("div");
+        legDiv.className = "tripDiv";
+
+        let aimedtimeStartLeg = document.createElement("p");
+        aimedtimeStartLeg.className = "aimedtimeStartLeg";
+        aimedtimeStartLeg.textContent = new Date(thisDeparture.aimedStartTime).toLocaleTimeString("no-NO", { hour: "2-digit", minute: "2-digit" });
+
+        detailsEl.appendChild(aimedtimeStartLeg);
+
+        if (thisDeparture.expectedStartTime) {
+            let expectedTimeStartLeg = document.createElement("p");
+            expectedTimeStartLeg.className = "expectedTimeStartLeg";
+            expectedTimeStartLeg.textContent = thisDeparture.expectedStartTime;
+        }
+
+        let aimedtimeEndLeg = document.createElement("p");
+        aimedtimeEndLeg.className = "aimedtimeEndLeg";
+        aimedtimeEndLeg.textContent = thisDeparture.aimedEndTime;
+
+        if (thisDeparture.expectedEndTime) {
+        let expectedTimeEndLeg = document.createElement("p");
+        expectedTimeEndLeg.className = "expectedTimeEndLeg";
+        expectedTimeEndLeg.textContent = thisDeparture.expectedEndTime;
         }
     }
 }

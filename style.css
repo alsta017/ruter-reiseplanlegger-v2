@@ -585,6 +585,30 @@ body{
     padding: 8px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
+.midpoint{
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    z-index: 1000;
+    width: fit-content;
+}
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;  /* Adjust the size as needed */
+    height: fit-content; /* Adjust the size as needed */
+    border-radius: 3px;  /* Adjust the border radius as needed */
+    color: white;
+    font-size: 14px;  /* Adjust the font size as needed */
+    font-weight: bold;
+    padding: 2px;
+    border: 1px;
+}
+
+.icon-number {
+    display: inline-block;
+}
 
 
 
