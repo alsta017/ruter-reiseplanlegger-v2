@@ -21,7 +21,10 @@ let avansert_ekstra_valg_buttonEl = document.getElementById("avansert_ekstra_val
 let arrowEl = document.getElementById("arrow");
 let byttetididEl = document.getElementById("byttetidid");
 let byttetiddivEl = document.getElementById("byttetiddiv");
-let resultaterEl = document.getElementById("resultater")
+let resultaterEl = document.getElementById("resultater");
+let detailsEl = document.getElementById("details");
+let allTimeEl = document.getElementById("allTime");
+let ekskludertelinjerdivEl = document.getElementById("ekskludertelinjerdiv");
 let trip;
 const redSpecialLines = ["110", "100", "300", "300E", "130", "140", "145", "500X", "1B", "2B", "3B", "4B", "5B", "11B", "12B", "13B", "17B", "18B", "19B", "31E", "80E", "84E", "56B", "73X", "75A", "75B", "75C", "77X", "77B", "77C", "78A", "78B", "80X", "81X", "1N", "2N", "3N", "4N", "5N", "11N", "12N", "19N", "42N", "63N", "70N", "81N", "130N", "140N", "70E"];
 const greenSpecialLines = ["110E", "115E", "125E", "140E", "150E", "160E", "250E", "255E", "260E", "265E", "390E", "400E", "470E", "210A", "210B", "215A", "215B", "370A", "370B", "505E", "545A", "545B", "560N", "565E", "240N", "250N", "500N", "540N"];
@@ -359,20 +362,30 @@ function søkreise() {
 
         console.log(geocoder_fra_data, geocoder_til_data);
 
-        if (geocoder_fra_data.features[fraclickedid].properties.layer === "address") {
-            fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}, name: "${geocoder_fra_data.features[tilclickedid].properties.name}"}`
-        } else if (geocoder_fra_data.features[fraclickedid].properties.layer === "venue") {
-            fraValue = `{place: "${geocoder_fra_data.features[fraclickedid].properties.id}"}`
+        if (geocoder_fra_data.features[fraclickedid]) {
+            let fraFeature = geocoder_fra_data.features[fraclickedid];
+            if (fraFeature.properties.layer === "address") {
+                fraValue = `{coordinates: {latitude: ${fraFeature.geometry.coordinates[1]}, longitude: ${fraFeature.geometry.coordinates[0]}}, name: "${fraFeature.properties.name}"}`
+            } else if (fraFeature.properties.layer === "venue") {
+                fraValue = `{place: "${fraFeature.properties.id}"}`
+            } else {
+                fraValue = `{coordinates: {latitude: ${fraFeature.geometry.coordinates[1]}, longitude: ${fraFeature.geometry.coordinates[0]}}}`
+            }
         } else {
-            fraValue = `{coordinates: {latitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[1]}, longitude: ${geocoder_fra_data.features[fraclickedid].geometry.coordinates[0]}}}`
+            console.error(`Invalid fraclickedid: ${fraclickedid}`);
         }
-
-        if (geocoder_til_data.features[tilclickedid].properties.layer === "address") {
-            toValue = `{coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}, name: "${geocoder_til_data.features[tilclickedid].properties.name}"}`
-        } else if (geocoder_til_data.features[tilclickedid].properties.layer === "venue") {
-            toValue = `{place: "${geocoder_til_data.features[tilclickedid].properties.id}"}`
+        
+        if (geocoder_til_data.features[tilclickedid]) {
+            let tilFeature = geocoder_til_data.features[tilclickedid];
+            if (tilFeature.properties.layer === "address") {
+                toValue = `{coordinates: {latitude: ${tilFeature.geometry.coordinates[1]}, longitude: ${tilFeature.geometry.coordinates[0]}}, name: "${tilFeature.properties.name}"}`
+            } else if (tilFeature.properties.layer === "venue") {
+                toValue = `{place: "${tilFeature.properties.id}"}`
+            } else {
+                toValue = `{coordinates: {latitude: ${tilFeature.geometry.coordinates[1]}, longitude: ${tilFeature.geometry.coordinates[0]}}}`
+            }
         } else {
-            toValue = `{coordinates: {latitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[1]}, longitude: ${geocoder_til_data.features[tilclickedid].geometry.coordinates[0]}}}`
+            console.error(`Invalid tilclickedid: ${tilclickedid}`);
         }
 
         let timeEl;
@@ -663,7 +676,7 @@ function departureclick(id) {
     // Log the trip object (assuming it's defined globally or in the enclosing scope)
     console.log(trip);
 
-    let detailsEl = document.getElementById("details")
+    detailsEl.textContent = "";
 
     let reiseoversikth1 = document.createElement("h1");
     reiseoversikth1.textContent = "Fra " + trip.fromPlace.name + " til " + trip.toPlace.name;
@@ -733,18 +746,7 @@ function departureclick(id) {
         function getExactMidpoint(latlngs) {
             // Calculate the index of the middle point
             let midIndex = Math.floor(latlngs.length / 2);
-            
-            // Check if the number of points is even
-            if (latlngs.length % 2 === 0) {
-                // If even, interpolate between the two middle points
-                let midPoint1 = latlngs[midIndex - 1];
-                let midPoint2 = latlngs[midIndex];
-                // Return the average of the two middle points
-                return [(midPoint1[0] + midPoint2[0]) / 2, (midPoint1[1] + midPoint2[1]) / 2];
-            } else {
-                // If odd, return the middle point
-                return latlngs[midIndex];
-            }
+            return latlngs[midIndex];
         }
         
         let midpoint = getExactMidpoint(decodedPolyLine);
@@ -914,4 +916,6 @@ function darkmodecheck() {
     fraInput.classList.toggle("light_mode4")
     tilInput.classList.toggle("light_mode4")
     ekskludertelinjerInput.classList.toggle("light_mode4")
+    detailsEl.classList.toggle("light_mode4")
+    ekskludertelinjerdivEl.classList.toggle("light_mode")
 }

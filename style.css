@@ -386,6 +386,10 @@ body{
     margin-bottom: 4px;
     width: 56%;
 }
+#ekskludertelinjerdiv.light_mode{
+    background-color: #cccccc;
+    color: black;
+}
 #ekskludertelinjerdivline1{
     display: flex;
     flex-flow: row;
@@ -453,6 +457,10 @@ body{
 #resultater.light_mode{
     color: black;
     background-color: #e5e5e5;
+}
+#resultater.light_mode .thisDepartureDiv .allTime {
+    background-color: #b2b2b2;
+    color: black;
 }
 
 .thisDepartureDiv{
@@ -534,6 +542,11 @@ body{
 .boat{
     background-color: #682c88;
 }
+#resultater.light_mode .thisDepartureDiv .linesDiv .gray {
+    background-color: #b2b2b2;
+    color: black;
+}
+
 .place-icon{
     border-radius: 16px;
 }
@@ -566,6 +579,11 @@ body{
     height: 100%;
     width: 30%;
     float: left;
+    text-align: center;
+}
+#details.light_mode4{
+    color: black;
+    background-color: #e5e5e5;
 }
 #map{
     width: 70%;
