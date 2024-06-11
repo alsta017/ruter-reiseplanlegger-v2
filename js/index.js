@@ -668,7 +668,7 @@ function departureclick(id) {
     map = L.map('map').setView([59.91, 10.75], 13);
 
     // Replace the Mapbox tile layer with the OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://api.maptiler.com/maps/basic-v2-dark/{z}/{x}/{y}.png?key=0EfHAMqq8iHZOSlF3MU9', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
         maxZoom: 19
     }).addTo(map);
@@ -743,42 +743,128 @@ function departureclick(id) {
             .openPopup();
         }
 
-        function getExactMidpoint(latlngs) {
-            // Calculate the index of the middle point
-            let midIndex = Math.floor(latlngs.length / 2);
-            return latlngs[midIndex];
+        function getPolylineMidpoint(latlngs) {
+            console.log('Decoded Polyline:', latlngs);
+        
+            // Check if the array is empty
+            if (latlngs.length === 0) {
+                console.error('The array of coordinates is empty.');
+                return null;
+            }
+        
+            let totalDistance = 0;
+            let cumulativeDistances = [];
+        
+            // Calculate cumulative distances between points
+            for (let i = 0; i < latlngs.length - 1; i++) {
+                const latlng1 = latlngs[i];
+                const latlng2 = latlngs[i + 1];
+                const distance = calculateDistance(latlng1, latlng2);
+                totalDistance += distance;
+                cumulativeDistances.push(totalDistance);
+            }
+        
+            console.log('Total Distance:', totalDistance);
+            console.log('Cumulative Distances:', cumulativeDistances);
+        
+            // Halfway distance
+            const halfDistance = totalDistance / 2;
+            console.log('Half Distance:', halfDistance);
+        
+            // Find the segment where the half distance falls
+            for (let i = 0; i < cumulativeDistances.length; i++) {
+                if (cumulativeDistances[i] >= halfDistance) {
+                    const latlng1 = latlngs[i];
+                    const latlng2 = latlngs[i + 1];
+                    const segmentDistance = cumulativeDistances[i] - (cumulativeDistances[i - 1] || 0);
+                    const remainingDistance = halfDistance - (cumulativeDistances[i - 1] || 0);
+                    const ratio = remainingDistance / segmentDistance;
+        
+                    const midpointLat = latlng1[0] + (latlng2[0] - latlng1[0]) * ratio;
+                    const midpointLng = latlng1[1] + (latlng2[1] - latlng1[1]) * ratio;
+        
+                    const midpoint = { lat: midpointLat, lng: midpointLng };
+                    console.log('Midpoint:', midpoint);
+                    return midpoint;
+                }
+            }
+        
+            console.error('Could not determine the midpoint.');
+            return null;
         }
         
-        let midpoint = getExactMidpoint(decodedPolyLine);
-        let thisDeparture = trip.tripPatterns[id].legs[p];
+        function calculateDistance(latlng1, latlng2) {
+            const R = 6371e3; // Earth radius in meters
+            const lat1 = latlng1[0] * Math.PI / 180;
+            const lat2 = latlng2[0] * Math.PI / 180;
+            const deltaLat = (latlng2[0] - latlng1[0]) * Math.PI / 180;
+            const deltaLng = (latlng2[1] - latlng1[1]) * Math.PI / 180;
         
-        if (thisDeparture.line) {
+            const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                      Math.cos(lat1) * Math.cos(lat2) *
+                      Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        
+            const distance = R * c;
+            return distance;
+        }
+        
+        let midpoint = getPolylineMidpoint(decodedPolyLine);
+        console.log('Calculated Midpoint:', midpoint);
+        let thisDeparture = trip.tripPatterns[id].legs[p];
+        console.log('thisDeparture:', thisDeparture);
+        console.log('thisDeparture.line:', thisDeparture.line);
+        
+        if (midpoint && thisDeparture.line !== null) {  // Ensure midpoint is valid and thisDeparture.line is not null
+            const publicCode = thisDeparture.line.publicCode;
+            let right = '0px';
+            let left = '0px';
+        
+            // Adjust font size and padding based on the length of the public code
+            if (publicCode.length === 1) {
+                left = '5px';
+            }
+
+            if (publicCode.endsWith('E') || publicCode.endsWith('X')) {
+                right = `${parseInt(right) + 2}px`;
+            }
+        
             let midpointIcon = L.divIcon({
                 className: 'midpoint-icon',
-                html: `<div class="icon-box" style="background-color: ${polylineColor};">
-                            <span class="icon-number">${thisDeparture.line.publicCode}</span>  <!-- This sets the text content to the line number -->
-                    </div>`,
+                html: `<div class="icon-box" style="background-color: ${polylineColor}; margin-left: ${right}; margin-right: ${left};">
+                            <span class="icon-number">${publicCode}</span>
+                        </div>`,
                 iconSize: [20, 20],  // Adjust the size as needed
                 iconAnchor: [10, 10],  // Center the icon
                 popupAnchor: [0, -15]
             });
             L.marker(midpoint, { icon: midpointIcon }).addTo(map);
+        } else {
+            if (midpoint === null) {
+                console.error('Midpoint is invalid.');
+            }
+            if (thisDeparture.line === null) {
+                console.log('thisDeparture.line is null.');
+            }
         }
 
         let intermediateIcon = L.divIcon({
             className: 'intermediate-icon',
-            html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="5" cy="5" r="5" fill="white" stroke="${polylineColor}" stroke-width="2"/></svg>`,
+            html: `<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="6" cy="6" r="5" fill="white" stroke="${polylineColor}" stroke-width="2"/></svg>`,
             iconSize: [10, 10],
             iconAnchor: [5, 5],
-            popupAnchor: [0, -15]
+            popupAnchor: [0, -20]
         });        
 
         if (trip.tripPatterns[id].legs[p].intermediateEstimatedCalls) {
             for (let l = 0; l < trip.tripPatterns[id].legs[p].intermediateEstimatedCalls.length; l++) {
-                L.marker([trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.latitude, trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.longitude], { icon: intermediateIcon }).addTo(map)
-                .bindPopup(trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.name)
-                .openPopup();
+                let marker = L.marker([trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.latitude, trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.longitude], { icon: intermediateIcon }).addTo(map);
+                marker.bindTooltip(trip.tripPatterns[id].legs[p].intermediateEstimatedCalls[l].quay.name, {
+                    permanent: true,
+                    direction: 'bottom',
+                    className: 'intermediate-tooltip'
+                }).openTooltip();
             }
         }
         

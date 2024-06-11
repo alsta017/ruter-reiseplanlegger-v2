@@ -624,10 +624,24 @@ body{
     border: 1px;
 }
 
+.intermediate-icon svg {
+    border-radius: 50%; /* Ensures the SVG is round */
+}
+
 .icon-number {
     display: inline-block;
 }
 
+.intermediate-tooltip {
+    font-family: 'TID UI' !important;
+    font-weight: bolder !important;
+    border: 0px !important;
+    color: black !important;
+    background-color: white !important;
+    opacity: 65% !important;
+    font-size: 80% !important;
+    left: 0px !important;
+}
 
 
 @font-face {
