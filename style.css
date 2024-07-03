@@ -624,8 +624,14 @@ body{
     border: 1px;
 }
 
+.intermediate-icon {
+    cursor: grab !important;
+}
 .intermediate-icon svg {
     border-radius: 50%; /* Ensures the SVG is round */
+}
+.leaflet-interactive{
+    cursor: grab !important;
 }
 
 .icon-number {
@@ -633,18 +639,35 @@ body{
 }
 
 .intermediate-tooltip {
-    font-family: 'TID UI' !important;
+    font-family: 'TID UI Light' !important;
     font-weight: bolder !important;
     border: 0px !important;
-    color: black !important;
-    background-color: white !important;
-    opacity: 65% !important;
+    color: white !important;
+    background-color: transparent !important;
+    opacity: 100% !important;
     font-size: 80% !important;
     left: 0px !important;
+    padding: 0 !important; /* Removes any padding */
+    margin: 0 !important; /* Removes any margin */
+    box-shadow: none !important; /* Removes any box-shadow */
+    outline: none !important; /* Removes any outline */
+    top: 8px !important;
+    cursor: default !important;
+}
+
+.intermediate-tooltip::before,
+.intermediate-tooltip::after {
+    content: none !important;
+    cursor: default !important;
 }
 
 
 @font-face {
     font-family: 'TID UI';
     src: url(fonts/TIDUI-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'TID UI Light';
+    src: url(fonts/TIDUI-Light.ttf);
 }

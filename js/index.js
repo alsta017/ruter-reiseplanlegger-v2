@@ -702,13 +702,13 @@ function departureclick(id) {
                 } else if (thisTripCode > 100 && thisTripCode < 4000 || greenSpecialLines.includes(thisTripCode)) {
                     polylineColor = "#76A300";
                 } else {
-                    polylineColor = "#383838";
+                    polylineColor = "#828282";
                 }
             } else {
-                polylineColor = "#383838";
+                polylineColor = "#828282";
             }
         } else {
-            polylineColor = "#383838";
+            polylineColor = "#828282";
         };
 
         let polyLine = L.polyline(decodedPolyLine, { color: polylineColor, weight: 6 });
@@ -867,6 +867,38 @@ function departureclick(id) {
                 }).openTooltip();
             }
         }
+
+        if (trip.tripPatterns[id].legs[p].fromPlace.quay) {
+            let startMarker = L.marker([trip.tripPatterns[id].legs[p].fromPlace.latitude, trip.tripPatterns[id].legs[p].fromPlace.longitude], { icon: PlaceIcon }).addTo(map);
+            startMarker.bindTooltip(trip.tripPatterns[id].legs[p].fromPlace.quay.name, {
+                permanent: true,
+                direction: 'bottom',
+                className: 'intermediate-tooltip'
+            }).openTooltip();
+        } else {
+            let startMarker = L.marker([trip.tripPatterns[id].legs[p].fromPlace.latitude, trip.tripPatterns[id].legs[p].fromPlace.longitude], { icon: PlaceIcon }).addTo(map);
+            startMarker.bindTooltip(trip.tripPatterns[id].legs[p].fromPlace.name, {
+                permanent: true,
+                direction: 'bottom',
+                className: 'intermediate-tooltip'
+            }).openTooltip();
+        }
+        if (trip.tripPatterns[id].legs[p].toPlace.quay) {
+            let endMarker = L.marker([trip.tripPatterns[id].legs[p].toPlace.latitude, trip.tripPatterns[id].legs[p].toPlace.longitude], { icon: PlaceIcon }).addTo(map);
+            endMarker.bindTooltip(trip.tripPatterns[id].legs[p].toPlace.quay.name, {
+                permanent: true,
+                direction: 'bottom',
+                className: 'intermediate-tooltip'
+            }).openTooltip();
+        } else {
+            let endMarker = L.marker([trip.tripPatterns[id].legs[p].toPlace.latitude, trip.tripPatterns[id].legs[p].toPlace.longitude], { icon: PlaceIcon }).addTo(map);
+            endMarker.bindTooltip(trip.tripPatterns[id].legs[p].toPlace.name, {
+                permanent: true,
+                direction: 'bottom',
+                className: 'intermediate-tooltip'
+            }).openTooltip();
+        }
+        
         
         let tripDiv = document.createElement("div");
         tripDiv.className = "tripDiv";
@@ -977,6 +1009,26 @@ function gatherLineNumbers(parentId) {
     }
     return [];  // Return an empty array if parent is not found
 }
+
+// FIX THIS !!!
+// map.on('zoomend', updateTooltipVisibility);
+
+// updateTooltipVisibility();
+
+// function updateTooltipVisibility() {
+//     const currentZoom = map.getZoom();
+//     const minZoomToShowTooltips = 15; // Set the minimum zoom level to show tooltips
+
+//     map.eachLayer((layer) => {
+//         if (layer instanceof L.Marker && layer.getTooltip()) {
+//             if (currentZoom >= minZoomToShowTooltips) {
+//                 layer.openTooltip();
+//             } else {
+//                 layer.closeTooltip();
+//             }
+//         }
+//     });
+// }
 
 function darkmodecheck() {
     var elements = [document.body];
