@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reiseplanlegger</title>
+    <title data-translate-key="title">Reiseplanlegger</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script src="https://kit.fontawesome.com/b85b88c31a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -13,24 +13,28 @@
 </head>
 <body>
     <div class="page_wrapper">
-        <h1>Reiseplanlegger v2 BETA</h1>
-        <p id="temptext">Funker ikke ennå! Bruk <a href="https://alsta017.github.io/ruter-reiseplanlegger">denne</a></p>
+        <h1 data-translate-key="welcomeMessage"></h1>
+        <p id="temptext" data-translate-key="notWorkMessage"></p>
         <i class="fa-solid fa-circle-half-stroke toggle_light_mode" onclick="toggle_dark_mode()"></i>
+        <select id="languageSwitcher">
+            <option value="no">Norsk</option>
+            <option value="en">English</option>
+        </select>
         <div class="fratil">
             <div id="fravelgdiv">
                 <div id="fra">
-                    <p>Fra:</p>
+                    <p data-translate-key="from"></p>
                     <form class="fra_form" onsubmit="return false;">
-                        <input type="text" id="fra_input" placeholder="Hvor reiser du fra?" required>
+                        <input type="text" id="fra_input" placeholder="" data-translate-key="fromPlaceholder" required>
                     </form>
                 </div>
                 <p id="fra_velg"></p>
             </div>
             <div id="tilvelgdiv">
                 <div id="til">
-                    <p>Til:</p>
+                    <p data-translate-key="to"></p>
                     <form class="til_form" onsubmit="return false;">
-                        <input type="text" id="til_input" placeholder="Hvor reiser du til?" required>
+                        <input type="text" id="til_input" placeholder="" data-translate-key="toPlaceholder" required>
                     </form>
                 </div>
                 <p id="til_velg"></p>
@@ -38,29 +42,46 @@
         </div>
         <div class="ekstra_valg">
             <div id="avgangankomstdiv">
-                <button type="button" onclick="now()" class="velgebutton selected nowbutton">Nå</button>
-                <button type="button" onclick="avgang()" class="velgebutton avgangbutton" id="avgangbuttonid">Avgang</button>
-                <button type="button" onclick="ankomst()" class="velgebutton ankomstbutton" id="ankomstbuttonid">Ankomst</button>
+                <button type="button" onclick="now()" class="velgebutton selected nowbutton" data-translate-key="now">Nå</button>
+                <button type="button" onclick="avgang()" class="velgebutton avgangbutton" id="avgangbuttonid" data-translate-key="departure">Avgang</button>
+                <button type="button" onclick="ankomst()" class="velgebutton ankomstbutton" id="ankomstbuttonid" data-translate-key="arrival">Ankomst</button>
             </div>
             <input type="datetime-local" id="datetimepicker">
-            <button id="avansert_ekstra_valg_button" class="ekstrabutton" onclick="avansert_ekstra_valg()">Ekstra valg <i class="fa-solid fa-caret-down" id="arrow"></i></button>
+            <button id="avansert_ekstra_valg_button" class="ekstrabutton" onclick="avansert_ekstra_valg()" data-translate-key="extraOptions">Ekstra valg <i class="fa-solid fa-caret-down" id="arrow"></i></button>
             <div id="avansert_ekstra_valg">
                 <div id="byttetiddiv">
-                    <p>Byttetid</p>
-                    <select name="byttetid" id="byttetidid"><option value="0" selected>0 min</option><option value="1">1 min</option><option value="2">2 min</option><option value="3">3 min</option><option value="4">4 min</option><option value="5">5 min</option><option value="6">6 min</option><option value="7">7 min</option><option value="8">8 min</option><option value="9">9 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">60 min</option></select>
+                    <p data-translate-key="exchangeTime">Byttetid</p>
+                    <select name="byttetid" id="byttetidid">
+                        <option value="0" selected>0 min</option>
+                        <option value="1">1 min</option>
+                        <option value="2">2 min</option>
+                        <option value="3">3 min</option>
+                        <option value="4">4 min</option>
+                        <option value="5">5 min</option>
+                        <option value="6">6 min</option>
+                        <option value="7">7 min</option>
+                        <option value="8">8 min</option>
+                        <option value="9">9 min</option>
+                        <option value="10">10 min</option>
+                        <option value="15">15 min</option>
+                        <option value="20">20 min</option>
+                        <option value="25">25 min</option>
+                        <option value="30">30 min</option>
+                        <option value="45">45 min</option>
+                        <option value="60">60 min</option>
+                    </select>
                 </div>
                 <div id="ekskludertelinjerdiv">
                     <div id="ekskludertelinjerdivline1">
-                        <p>Ekskluder linjer</p>
+                        <p data-translate-key="excludeLines">Ekskluder linjer</p>
                         <input type="text" id="ekskludertelinjerInput" placeholder="Linje">
                     </div>
                     <div id="ekskludertelinjerliste" class="line-tags"></div>
                 </div>
-                <!-- Inkluder linjer etc -->
             </div>
         </div>
         <div class="avansert_ekstra_valg"></div>
-        <button class="søkebutton" onclick="søkreise()">Søk reise</button>
+        <button class="søkebutton" onclick="søkreise()" data-translate-key="searchTrip">Søk reise</button>
         <div id="resultaterdiv">
             <p id="resultater"></p>
         </div>
@@ -70,6 +91,7 @@
         <div id="details"></div>
         <div id="map"></div>
     </div>
+    <script src="lang/lang.js"></script>
     <script src="js/index.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="

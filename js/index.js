@@ -65,7 +65,7 @@ fraInput.onkeydown = function() {
 
     // Lage laster P element
     let tilload = document.createElement("p");
-    tilload.textContent = "Laster inn...";
+    tilload.textContent = "...";
     fraVelg.appendChild(tilload);
 
     // Lage searchTimeout på 0.5 sekunder så den ikke sender requests hele tiden (timeout)
@@ -226,7 +226,7 @@ tilInput.onkeydown = function() {
     tilVelg.style.display = "flex";
 
     let tilload2 = document.createElement("p");
-    tilload2.textContent = "Laster inn...";
+    tilload2.textContent = "...";
     tilVelg.appendChild(tilload2);
 
     if (searchTimeout2 != undefined) clearTimeout(searchTimeout2);
@@ -669,7 +669,7 @@ function departureclick(id) {
 
     // Replace the Mapbox tile layer with the OpenStreetMap tile layer
     L.tileLayer('https://api.maptiler.com/maps/basic-v2-dark/{z}/{x}/{y}.png?key=0EfHAMqq8iHZOSlF3MU9', {
-        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | <a href="https://maptiler.com/">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright">',
         maxZoom: 19
     }).addTo(map);
 
@@ -979,14 +979,92 @@ function avansert_ekstra_valg() {
     
 }
 
-document.getElementById("ekskludertelinjerInput").addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const inputValue = this.value.trim();
-        if (inputValue != "") {
-            addLineTag(this.value.trim(), 'ekskludertelinjerliste');
-            this.value = "";
+// Get the input and list elements
+const ekskludertelinjerInput = document.getElementById('ekskludertelinjerInput');
+const ekskludertelinjerListe = document.getElementById('ekskludertelinjerliste');
+
+// Function to check if a line exists using the Entur API
+function checkLineExists(line) {
+    const query = `
+    query GetLines($publicCode: String!) {
+      lines(publicCode: $publicCode) {
+        id
+        publicCode
+      }
+    }`;
+
+    const variables = {
+        publicCode: line
+    };
+
+    return fetch('https://api.entur.io/journey-planner/v3/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'ET-Client-Name': 'alsta017-reiseplanlegger' // Replace with your client name as required by Entur
+        },
+        body: JSON.stringify({
+            query,
+            variables
+        })
+    })
+    .then(response => response.json())
+    .then(result => result.data.lines && result.data.lines.length > 0);
+}
+
+// Function to check if a line is already in the excluded list
+function isLineInExcludedList(line) {
+    const existingLines = ekskludertelinjerListe.getElementsByClassName('line-tag');
+    for (let i = 0; i < existingLines.length; i++) {
+        if (existingLines[i].textContent.replace('✕', '').trim() === line) {
+            return true;
         }
+    }
+    return false;
+}
+
+// Function to add a line to the excluded list
+function addExcludedLine(line) {
+    if (line.trim() === '') return;
+
+    // Check if the line exists
+    checkLineExists(line).then(exists => {
+        if (!exists) {
+            alert('Line does not exist.');
+            return;
+        }
+
+        // Check if the line is already in the excluded list
+        if (isLineInExcludedList(line)) {
+            alert('Line is already in the excluded list.');
+            return;
+        }
+
+        const lineTag = document.createElement('div');
+        lineTag.className = 'line-tag';
+        lineTag.textContent = line;
+
+        // Add a remove button to each line tag
+        const removeButton = document.createElement('span');
+        removeButton.className = 'remove-line';
+        removeButton.textContent = '✕';
+        removeButton.onclick = function() {
+            ekskludertelinjerListe.removeChild(lineTag);
+        };
+
+        lineTag.appendChild(removeButton);
+        ekskludertelinjerListe.appendChild(lineTag);
+
+        // Clear the input
+        ekskludertelinjerInput.value = '';
+    });
+}
+
+// Event listener for input field to add line on Enter key
+ekskludertelinjerInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        addExcludedLine(ekskludertelinjerInput.value);
+        e.preventDefault();
     }
 });
 

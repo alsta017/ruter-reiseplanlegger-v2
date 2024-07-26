@@ -1,0 +1,21 @@
+{
+    "title": "Reiseplanlegger",
+    "welcomeMessage": "Velkommen til Reiseplanlegger",
+    "planYourTrip": "Planlegg reisen din",
+    "start": "Start",
+    "end": "Slutt",
+    "submit": "Send inn",
+    "from": "Fra:",
+    "to": "Til:",
+    "searchTrip": "Søk reise",
+    "now": "Nå",
+    "departure": "Avgang",
+    "arrival": "Ankomst",
+    "extraOptions": "Ekstra valg <i class='fa-solid fa-caret-down'></i>",
+    "exchangeTime": "Byttetid",
+    "excludeLines": "Ekskluder linjer",
+    "fromPlaceholder": "Hvor reiser du fra?",
+    "toPlaceholder": "Hvor reiser du til?",
+    "notWorkMessage": "Funker ikke ennå! Bruk <a href='https://alsta017.github.io/ruter-reiseplanlegger'>denne</a>",
+    "loading": "Laster inn..."
+}
