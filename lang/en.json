@@ -17,5 +17,8 @@
     "fromPlaceholder": "Where are you traveling from?",
     "toPlaceholder": "Where are you traveling to?",
     "notWorkMessage": "Does not work yet! Please use <a href='https://alsta017.github.io/ruter-reiseplanlegger'>this one</a>",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "cookieConsent": "We use cookies to save your preferences.",
+    "accept": "Accept",
+    "deny": "Deny"
 }

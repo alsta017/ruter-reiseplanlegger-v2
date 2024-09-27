@@ -90,7 +90,7 @@ function fra_geocoder_fra() {
             fraVelg.textContent = "";
             a = 0;
 
-            console.log(data);
+            console.log(data)
 
             geocoder_fra_data = data;
 
@@ -360,8 +360,6 @@ function søkreise() {
         let toValue;
 
 
-        console.log(geocoder_fra_data, geocoder_til_data);
-
         if (geocoder_fra_data.features[fraclickedid]) {
             let fraFeature = geocoder_fra_data.features[fraclickedid];
             if (fraFeature.properties.layer === "address") {
@@ -406,9 +404,6 @@ function søkreise() {
 
         // Now use lastFromLocation and lastToLocation instead of geocoder_fra_data.features[fraclickedid] and geocoder_til_data.features[tilclickedid]
 
-        console.log(timeEl)
-        console.log(avgangAnkomst)
-        console.log(byttetididEl.value)
         let byttetididElSec = byttetididEl.value * 60;
 
         fetch('https://api.entur.io/journey-planner/v3/graphql', {
@@ -673,9 +668,6 @@ function departureclick(id) {
         maxZoom: 19
     }).addTo(map);
 
-    // Log the trip object (assuming it's defined globally or in the enclosing scope)
-    console.log(trip);
-
     detailsEl.textContent = "";
 
     let reiseoversikth1 = document.createElement("h1");
@@ -744,7 +736,6 @@ function departureclick(id) {
         }
 
         function getPolylineMidpoint(latlngs) {
-            console.log('Decoded Polyline:', latlngs);
         
             // Check if the array is empty
             if (latlngs.length === 0) {
@@ -764,12 +755,8 @@ function departureclick(id) {
                 cumulativeDistances.push(totalDistance);
             }
         
-            console.log('Total Distance:', totalDistance);
-            console.log('Cumulative Distances:', cumulativeDistances);
-        
             // Halfway distance
             const halfDistance = totalDistance / 2;
-            console.log('Half Distance:', halfDistance);
         
             // Find the segment where the half distance falls
             for (let i = 0; i < cumulativeDistances.length; i++) {
@@ -784,7 +771,6 @@ function departureclick(id) {
                     const midpointLng = latlng1[1] + (latlng2[1] - latlng1[1]) * ratio;
         
                     const midpoint = { lat: midpointLat, lng: midpointLng };
-                    console.log('Midpoint:', midpoint);
                     return midpoint;
                 }
             }
@@ -810,10 +796,7 @@ function departureclick(id) {
         }
         
         let midpoint = getPolylineMidpoint(decodedPolyLine);
-        console.log('Calculated Midpoint:', midpoint);
         let thisDeparture = trip.tripPatterns[id].legs[p];
-        console.log('thisDeparture:', thisDeparture);
-        console.log('thisDeparture.line:', thisDeparture.line);
         
         if (midpoint && thisDeparture.line !== null) {  // Ensure midpoint is valid and thisDeparture.line is not null
             const publicCode = thisDeparture.line.publicCode;
@@ -844,7 +827,7 @@ function departureclick(id) {
                 console.error('Midpoint is invalid.');
             }
             if (thisDeparture.line === null) {
-                console.log('thisDeparture.line is null.');
+                // Do nothing
             }
         }
 
@@ -904,13 +887,20 @@ function departureclick(id) {
         tripDiv.className = "tripDiv";
         
         let legDiv = document.createElement("div");
-        legDiv.className = "tripDiv";
+        legDiv.className = "legDiv";
+
+        detailsEl.appendChild(legDiv);
+
+        let timeDiv = document.createElement("div");
+        timeDiv.className = "timeDiv";
+
+        legDiv.appendChild(timeDiv);
 
         let aimedtimeStartLeg = document.createElement("p");
         aimedtimeStartLeg.className = "aimedtimeStartLeg";
         aimedtimeStartLeg.textContent = new Date(thisDeparture.aimedStartTime).toLocaleTimeString("no-NO", { hour: "2-digit", minute: "2-digit" });
 
-        detailsEl.appendChild(aimedtimeStartLeg);
+        timeDiv.appendChild(aimedtimeStartLeg);
 
         if (thisDeparture.expectedStartTime) {
             let expectedTimeStartLeg = document.createElement("p");
@@ -1108,6 +1098,31 @@ function gatherLineNumbers(parentId) {
 //     });
 // }
 
+const cookieConsent = document.getElementById("cookieConsent");
+const cookieMessage = document.getElementById("cookieMessage");
+const acceptCookie = document.getElementById("acceptCookie");
+const denyCookie = document.getElementById("denyCookie");
+
+
+if (!localStorage.getItem("cookiesAccepted") && !localStorage.getItem("cookiesDenied")) {
+    cookieConsent.style.display = "block";
+}
+
+acceptCookie.addEventListener("click", function() {
+    localStorage.setItem("cookiesAccepted", "true");
+    cookieConsent.style.display = "none";
+});
+
+denyCookie.addEventListener("click", function() {
+    localStorage.setItem("cookiesDenied", "true");
+    cookieMessage.textContent = "Dine preferanser vil ikke bli lagret. Opplevelsen kan bli dårligere på grunn av dette.";
+    acceptCookie.style.display = "none";
+    denyCookie.style.display = "none";
+    setTimeout(() => {
+        cookieConsent.style.display = "none";
+    }, 2500);
+});
+
 function darkmodecheck() {
     var elements = [document.body];
     for(i = 0; i < elements.length; i++) {
@@ -1135,3 +1150,4 @@ function darkmodecheck() {
     detailsEl.classList.toggle("light_mode4")
     ekskludertelinjerdivEl.classList.toggle("light_mode")
 }
+

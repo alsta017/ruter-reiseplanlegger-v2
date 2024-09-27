@@ -17,5 +17,8 @@
     "fromPlaceholder": "Hvor reiser du fra?",
     "toPlaceholder": "Hvor reiser du til?",
     "notWorkMessage": "Funker ikke ennå! Bruk <a href='https://alsta017.github.io/ruter-reiseplanlegger'>denne</a>",
-    "loading": "Laster inn..."
+    "loading": "Laster inn...",
+    "cookieConsent": "Vi bruker informasjonskapsler for å lagre dine innstillinger.",
+    "accept": "Aksepter",
+    "deny": "Avslå"
 }

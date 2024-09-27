@@ -678,6 +678,48 @@ body{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
+.cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 1002;
+    display: none; /* Hide initially, show with JS */
+    font-family: 'TID UI';
+}
+
+.cookie-consent p {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+.accept-btn,
+.deny-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'TID UI';
+}
+
+.deny-btn {
+    background-color: #f44336;
+}
+
+.accept-btn:hover,
+.deny-btn:hover {
+    opacity: 0.8;
+}
+
 
 @font-face {
     font-family: 'TID UI';
