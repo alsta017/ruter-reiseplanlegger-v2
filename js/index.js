@@ -663,7 +663,7 @@ function departureclick(id) {
     map = L.map('map').setView([59.91, 10.75], 13);
 
     // Replace the Mapbox tile layer with the OpenStreetMap tile layer
-    L.tileLayer('https://api.maptiler.com/maps/basic-v2-dark/{z}/{x}/{y}.png?key=0EfHAMqq8iHZOSlF3MU9', {
+    L.tileLayer('https://api.maptiler.com/maps/basic-v2-dark/{z}/{x}/{y}.png?key=B38UkAr4o4dNX87Kc0VF', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors | <a href="https://maptiler.com/">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright">',
         maxZoom: 19
     }).addTo(map);
